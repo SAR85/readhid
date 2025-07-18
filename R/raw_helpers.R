@@ -153,10 +153,10 @@ rtc <- function(x, ...) {
   suppressWarnings(rawToChar(x, ...))
 }
 
-
 #' Parses a date from a raw vector
 #'
 #' @param f Raw vector
+#' @param ... Other arguments passed to `as.Date()`
 #'
 #' @returns Date vector of length 1
 #'
@@ -176,9 +176,9 @@ hidDate <- function(f, ...) {
 #'
 hidTime <- function(f) {
   list(
-    hour = uint8(data, n = 1),
-    minute = uint8(data[-1], n = 1),
-    second = uint8(data[-(1:2)], n = 1),
-    hsecond = uint8(data[-(1:3)], n = 1)
+    hour = uint8(f, n = 1),
+    minute = uint8(f[-1], n = 1),
+    second = uint8(f[-(1:2)], n = 1),
+    hsecond = uint8(f[-(1:3)], n = 1)
   )
 }
