@@ -10,7 +10,7 @@ new_hid <- function(filepath) {
     x$header$directory_offset,
     x$header$num_elements
   )
-  x$fsa_data <- NULL # Todo: extract the abif data for each directory entry
+  x$data <- NULL # Todo: extract the abif data for each directory entry
   x$hid_data <- NULL # Todo: extract the data for "DATA" fields in hid files
   x$hid_peaks <- NULL # Todo: extract the data for "Peak" fields in hid files
 
@@ -87,12 +87,33 @@ extract_directory <- function(raw_data, directory_offset, num_elements) {
     by = 28
   )
 
-  lapply(entry_offsets, function(x) {
-    extract_directory_entry(raw_data[x:(x + 27)])
+  # Extract the standard values based on the ABIF specification
+  dir_list <- lapply(entry_offsets, function(x) {
+    entry <- extract_directory_entry(raw_data[x:(x + 27)])
+
+    if (entry$type %in% special_types()) {
+      entry$data_offset <- special_data_offset(raw_data, entry)
+      entry$type <- element_types(entry$type, get = "sub")
+      entry$num_elements <- special_array_length(
+        seek_raw(entry$name, entry$num, raw_data),
+        raw_data
+      )
+      entry$element_size <- element_types(entry$type, get = "size")
+      entry$data_size <- entry$num_elements * entry$element_size
+    }
+    entry
   })
+
+  names(dir_list) <- sapply(dir_list, function(x) {
+    paste0(x$name, ".", x$num)
+  })
+
+  dir_list
 }
 
-#' Extracts the information for a single ABIF directory entry
+#' Extracts the information for a single ABIF directory entry. This function returns
+#' correct values for standard directory entries but will return incorrect information
+#' for special data types.
 #'
 #' @param raw_data Raw vector of length 28 representing the directory entry.
 #'
@@ -114,3 +135,16 @@ extract_directory_entry <- function(raw_data) {
   )
   out
 }
+
+#' Title
+#'
+#' @param raw_data
+#'
+#' @returns
+#' @export
+#'
+#' @examples
+extract_data <- function(raw_data) {
+
+}
+
