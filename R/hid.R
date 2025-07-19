@@ -10,9 +10,8 @@ new_hid <- function(filepath) {
     x$header$directory_offset,
     x$header$num_elements
   )
-  x$data <- NULL # Todo: extract the abif data for each directory entry
-  x$hid_data <- NULL # Todo: extract the data for "DATA" fields in hid files
-  x$hid_peaks <- NULL # Todo: extract the data for "Peak" fields in hid files
+  x$data <- extract_data(x$raw_data, x$directory)
+  x$hid_peaks <- NULL # TODO: Dataframe (?) for nice presentation of peak data from .hid files
 
   structure(x, class = "hid")
 }
@@ -23,8 +22,8 @@ validate_hid <- function() {
 }
 
 # Placeholder for hid class helper
-hid <- function() {
-
+hid <- function(filepath) {
+  new_hid(filepath)
 }
 
 #' Reads an hid file
@@ -92,7 +91,11 @@ extract_directory <- function(raw_data, directory_offset, num_elements) {
     entry <- extract_directory_entry(raw_data[x:(x + 27)])
 
     if (entry$type %in% special_types()) {
-      entry$data_offset <- special_data_offset(raw_data, entry)
+      entry$data_offset <- special_data_offset(
+        raw_data,
+        entry$name,
+        entry$num
+      )
       entry$type <- element_types(entry$type, get = "sub")
       entry$num_elements <- special_array_length(
         seek_raw(entry$name, entry$num, raw_data),
@@ -130,21 +133,24 @@ extract_directory_entry <- function(raw_data) {
     element_size = int16(raw_data[11:12]),
     num_elements = int32(raw_data[13:16]),
     data_size = int32(raw_data[17:20]),
-    data_offset = int32(raw_data[21:24]),
-    data_handle = int32(raw_data[25:28])
+    data_offset = int32(raw_data[21:24])
+    # data_handle = int32(raw_data[25:28])
   )
   out
 }
 
-#' Title
+#' Extracts the data associated with all directory entries in a .fsa or .hid file.
 #'
-#' @param raw_data
+#' @param raw_data Raw vector from .fsa or .hid file.
+#' @param directory List representing the ABIF directory.
 #'
-#' @returns
-#' @export
+#' @returns List containing an element with the data for each directory entry.
 #'
-#' @examples
-extract_data <- function(raw_data) {
+extract_data <- function(raw_data, directory) {
+  lapply(directory, function(x) {
+    out_raw <- extract_raw_data(raw_data, x$data_offset, x$data_size)
+    out_parsed <- parse_data(out_raw, x$type, x$num_elements)
 
+    out_parsed
+  })
 }
-

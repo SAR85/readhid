@@ -8,6 +8,8 @@ hidDate(f, ...)
 }
 \arguments{
 \item{f}{Raw vector}
+
+\item{...}{Other arguments passed to \code{as.Date()}}
 }
 \value{
 Date vector of length 1
