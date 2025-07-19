@@ -21,7 +21,16 @@ validate_hid <- function() {
 
 }
 
-# Placeholder for hid class helper
+#' Creates an hid object with the data from an .fsa or .hid file.
+#'
+#' @param filepath character vector of length 1. Path to the .fsa or .hid file.
+#'
+#' @returns hid object
+#' @export hid
+#'
+#' @examples
+#' \dontrun{my_hid_file <- hid("/path/to/file.hid")}
+#'
 hid <- function(filepath) {
   new_hid(filepath)
 }
