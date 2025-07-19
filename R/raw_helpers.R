@@ -182,3 +182,15 @@ hidTime <- function(f) {
     hsecond = uint8(f[-(1:3)], n = 1)
   )
 }
+
+char <- function(f) {
+  tryCatch(
+    rtc(f),
+    finally = paste(rawToChar(f, multiple = TRUE), collapse = "")
+  )
+}
+
+pString <- function(f) {
+  n <- int8(f[1])
+  rtc(f[2:(2 + n)])
+}
