@@ -138,7 +138,7 @@ parse_data <- function(raw_data, element_type, num_elements) {
   out <- NULL
 
   if (element_type == 1L) {
-    out <- int8(raw_data, n = num_elements)
+    out <- uint8(raw_data, n = num_elements)
   }
   if (element_type == 2L) {
     out <- char(raw_data)
