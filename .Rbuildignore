@@ -1,2 +1,4 @@
 ^readhid\.Rproj$
 ^\.Rproj\.user$
+^\.github$
+^README\.Rmd$
