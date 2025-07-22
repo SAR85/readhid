@@ -139,7 +139,7 @@ float32 <- function(f, n = 1L, ...) {
 #' @returns Double vector
 #'
 float64 <- function(f, n = 1L, ...) {
-  readBin(f, what = "numeric", endian = "big", size = 8, n = 1L, ...)
+  readBin(f, what = "numeric", endian = "big", size = 8, n = n, ...)
 }
 
 #' Parses strings from raw vector
