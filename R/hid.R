@@ -1,4 +1,4 @@
-new_hid <- function(filepath) {
+new_hid <- function(filepath, raw = FALSE) {
   x <- list(
     file = filepath,
     raw_data = read_hid(filepath)
@@ -10,7 +10,7 @@ new_hid <- function(filepath) {
     x$header$directory_offset,
     x$header$num_elements
   )
-  x$data <- extract_data(x$raw_data, x$directory)
+  x$data <- extract_data(x$raw_data, x$directory, raw = raw)
   x$hid_peaks <- NULL # TODO: Dataframe (?) for nice presentation of peak data from .hid files
 
   structure(x, class = "hid")
@@ -31,8 +31,8 @@ validate_hid <- function() {
 #' @examples
 #' \dontrun{my_hid_file <- hid("/path/to/file.hid")}
 #'
-hid <- function(filepath) {
-  new_hid(filepath)
+hid <- function(filepath, raw = FALSE) {
+  new_hid(filepath, raw)
 }
 
 #' Reads an hid file
@@ -152,14 +152,20 @@ extract_directory_entry <- function(raw_data) {
 #'
 #' @param raw_data Raw vector from .fsa or .hid file.
 #' @param directory List representing the ABIF directory.
+#' @param raw logical indicating whether to return raw data or parsed data
 #'
 #' @returns List containing an element with the data for each directory entry.
+#' Returns the raw data when `raw = TRUE`
 #'
-extract_data <- function(raw_data, directory) {
+extract_data <- function(raw_data, directory, raw = FALSE) {
   lapply(directory, function(x) {
     out_raw <- extract_raw_data(raw_data, x$data_offset, x$data_size)
     out_parsed <- parse_data(out_raw, x$type, x$num_elements)
 
-    out_parsed
+    if (raw) {
+      out_raw
+    } else {
+      out_parsed
+    }
   })
 }
