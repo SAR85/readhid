@@ -8,6 +8,8 @@ hid(filepath, raw = FALSE)
 }
 \arguments{
 \item{filepath}{character vector of length 1. Path to the .fsa or .hid file.}
+
+\item{raw}{logical. When TRUE, returns the raw data for each directory entry instead of the parsed data.}
 }
 \value{
 hid object
