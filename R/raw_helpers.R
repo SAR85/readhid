@@ -58,26 +58,6 @@ int8 <- function(f, n = 1L, ...) {
   )
 }
 
-#' Parses unsigned 32 bit integers from a raw vector
-#'
-#' @param f Raw vector
-#' @param n The maximum number of records to be read. Passed to `readBin()`.
-#' @param ... Other arguments to pass to `readBin()`
-#'
-#' @returns Integer vector
-#'
-uint32 <- function(f, n = 1L, ...) {
-  readBin(
-    f,
-    what = "integer",
-    signed = FALSE,
-    endian = "big",
-    size = 4,
-    n = n,
-    ...
-  )
-}
-
 #' Parses unsigned 16 bit integers from a raw vector
 #'
 #' @param f Raw vector
