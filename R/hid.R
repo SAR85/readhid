@@ -1,4 +1,7 @@
-new_hid <- function(filepath, raw = FALSE) {
+new_hid <- function(filepath,
+                    raw = FALSE,
+                    friendly_peak_names = TRUE,
+                    dye_names = TRUE) {
   x <- list(
     file = filepath,
     raw_data = read_hid(filepath)
@@ -11,7 +14,11 @@ new_hid <- function(filepath, raw = FALSE) {
     x$header$num_elements
   )
   x$data <- extract_data(x$raw_data, x$directory, raw = raw)
-  x$hid_peaks <- NULL # TODO: Dataframe (?) for nice presentation of peak data from .hid files
+  x$hid_peaks <- peaks_to_df(
+    x$data,
+    friendly_names = friendly_peak_names,
+    dye_names = dye_names
+  )
 
   structure(x, class = "hid")
 }
@@ -25,6 +32,7 @@ validate_hid <- function() {
 #'
 #' @param filepath character vector of length 1. Path to the .fsa or .hid file.
 #' @param raw logical. When TRUE, returns the raw data for each directory entry instead of the parsed data.
+#' @param ... Other parameters to customize the data parsing and/or object format
 #'
 #' @returns hid object
 #' @export hid
@@ -34,8 +42,8 @@ validate_hid <- function() {
 #' my_hid_file <- hid("/path/to/file.hid")
 #' }
 #'
-hid <- function(filepath, raw = FALSE) {
-  new_hid(filepath, raw)
+hid <- function(filepath, raw = FALSE, ...) {
+  new_hid(filepath, raw, ...)
 }
 
 #' Reads an hid file

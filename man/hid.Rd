@@ -4,12 +4,14 @@
 \alias{hid}
 \title{Creates an hid object with the data from an .fsa or .hid file.}
 \usage{
-hid(filepath, raw = FALSE)
+hid(filepath, raw = FALSE, ...)
 }
 \arguments{
 \item{filepath}{character vector of length 1. Path to the .fsa or .hid file.}
 
 \item{raw}{logical. When TRUE, returns the raw data for each directory entry instead of the parsed data.}
+
+\item{...}{Other parameters to customize the data parsing and/or object format}
 }
 \value{
 hid object
