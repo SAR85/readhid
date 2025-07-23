@@ -24,12 +24,15 @@ validate_hid <- function() {
 #' Creates an hid object with the data from an .fsa or .hid file.
 #'
 #' @param filepath character vector of length 1. Path to the .fsa or .hid file.
+#' @param raw logical. When TRUE, returns the raw data for each directory entry instead of the parsed data.
 #'
 #' @returns hid object
 #' @export hid
 #'
 #' @examples
-#' \dontrun{my_hid_file <- hid("/path/to/file.hid")}
+#' \dontrun{
+#' my_hid_file <- hid("/path/to/file.hid")
+#' }
 #'
 hid <- function(filepath, raw = FALSE) {
   new_hid(filepath, raw)
@@ -48,7 +51,12 @@ read_hid <- function(filepath, ...) {
 
   hid_file <- file(filepath, open = "rb")
 
-  out <- readBin(hid_file, what = "raw", n = 1.2 * file.info(filepath)$size, ...)
+  out <- readBin(
+    hid_file,
+    what = "raw",
+    n = 1.2 * file.info(filepath)$size,
+    ...
+  )
 
   close(hid_file)
 

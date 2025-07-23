@@ -4,7 +4,7 @@
 \alias{hid}
 \title{Creates an hid object with the data from an .fsa or .hid file.}
 \usage{
-hid(filepath)
+hid(filepath, raw = FALSE)
 }
 \arguments{
 \item{filepath}{character vector of length 1. Path to the .fsa or .hid file.}
@@ -16,6 +16,8 @@ hid object
 Creates an hid object with the data from an .fsa or .hid file.
 }
 \examples{
-\dontrun{my_hid_file <- hid("/path/to/file.hid")}
+\dontrun{
+my_hid_file <- hid("/path/to/file.hid")
+}
 
 }

@@ -4,15 +4,18 @@
 \alias{extract_data}
 \title{Extracts the data associated with all directory entries in a .fsa or .hid file.}
 \usage{
-extract_data(raw_data, directory)
+extract_data(raw_data, directory, raw = FALSE)
 }
 \arguments{
 \item{raw_data}{Raw vector from .fsa or .hid file.}
 
 \item{directory}{List representing the ABIF directory.}
+
+\item{raw}{logical indicating whether to return raw data or parsed data}
 }
 \value{
 List containing an element with the data for each directory entry.
+Returns the raw data when \code{raw = TRUE}
 }
 \description{
 Extracts the data associated with all directory entries in a .fsa or .hid file.
