@@ -71,6 +71,8 @@ element_types <- function(element_type, get = c("name", "type", "size", "sub")) 
 #' @returns integer representing the matching index in `raw_data`
 #'
 seek_raw <- function(name, number, raw_data) {
+  stopifnot(is.integer(number))
+
   name_raw <- charToRaw(name)
   number_raw <- writeBin(number, raw(), size = 4, endian = "big")
   search_raw <- c(name_raw, number_raw)
