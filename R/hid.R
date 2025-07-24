@@ -14,11 +14,14 @@ new_hid <- function(filepath,
     x$header$num_elements
   )
   x$data <- extract_data(x$raw_data, x$directory, raw = raw)
-  x$hid_peaks <- peaks_to_df(
-    x$data,
-    friendly_names = friendly_peak_names,
-    dye_names = dye_names
-  )
+
+  if (!raw) {
+    x$hid_peaks <- peaks_to_df(
+      x$data,
+      friendly_names = friendly_peak_names,
+      dye_names = dye_names
+    )
+  }
 
   structure(x, class = "hid")
 }
@@ -121,12 +124,20 @@ extract_directory <- function(raw_data, directory_offset, num_elements) {
         entry$name,
         entry$num
       )
+      # Substitute the normal element_type for later parsing
       entry$type <- element_types(entry$type, get = "sub")
+
+      # Get the number of elements (array length)
+      file_offset <- seek_raw(entry$name, entry$num, raw_data)
       entry$num_elements <- special_array_length(
-        seek_raw(entry$name, entry$num, raw_data),
+        file_offset,
         raw_data
       )
+
+      # Get the element size
       entry$element_size <- element_types(entry$type, get = "size")
+
+      # Set the data size
       entry$data_size <- entry$num_elements * entry$element_size
     }
     entry
