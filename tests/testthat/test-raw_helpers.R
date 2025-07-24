@@ -34,15 +34,16 @@ test_that("8-bit unsigned integers parse correctly", {
 })
 
 # float32
-ex_float32 <- writeBin(c(0, 1, 2, 3), raw(), size = 4, endian = "big")
 test_that("32-bit floats parse correctly", {
+  ex_float32 <- writeBin(c(0, 1, 2, 3), raw(), size = 4, endian = "big")
   expect_equal(float32(ex_float32), 0)
   expect_equal(float32(ex_float32, n = length(ex_float32)), c(0, 1, 2, 3))
 })
 
 # float64
-ex_float64 <- writeBin(c(0, 1, 2, 3), raw(), size = 8, endian = "big")
+
 test_that("64-bit floats parse correctly", {
+  ex_float64 <- writeBin(c(0, 1, 2, 3), raw(), size = 8, endian = "big")
   expect_equal(float64(ex_float64), 0)
   expect_equal(float64(ex_float64, n = length(ex_float64)), c(0, 1, 2, 3))
 })
