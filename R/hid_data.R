@@ -15,6 +15,8 @@ special_types <- function() {
 #' @returns Character vector or integer vector of length 1. Depends on value of `get`
 #'
 element_types <- function(element_type, get = c("name", "type", "size", "sub")) {
+  stopifnot(is.integer(element_type))
+
   df <- data.frame(
     name = c(
       "byte", # 1
@@ -135,7 +137,9 @@ extract_raw_data <- function(raw_data, data_offset, data_size) {
 #' @returns List, character, or numeric vector, depending on element type. The parsed data from the directory entry.
 #'
 parse_data <- function(raw_data, element_type, num_elements) {
-  out <- NULL
+
+  # Default to returning the raw data if element_type is not supported
+  out <- raw_data
 
   if (element_type == 1L) {
     out <- uint8(raw_data, n = num_elements)
