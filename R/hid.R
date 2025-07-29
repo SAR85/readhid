@@ -36,6 +36,8 @@ validate_hid <- function() {
 #' @param filepath character vector of length 1. Path to the .fsa or .hid file.
 #' @param raw logical. When TRUE, returns the raw data for each directory entry instead of the parsed data.
 #' @param ... Other parameters to customize the data parsing and/or object format
+#' @param friendly_peak_names logical. When TRUE, uses informative names in the `hid_peaks` data frame
+#' @param dye_names logical. When TRUE, adds dye names to `hid_peaks` data frame
 #'
 #' @returns hid object
 #' @export hid
@@ -45,7 +47,8 @@ validate_hid <- function() {
 #' my_hid_file <- hid("/path/to/file.hid")
 #' }
 #'
-hid <- function(filepath, raw = FALSE, ...) {
+hid <- function(filepath, raw = FALSE, friendly_peak_names = TRUE,
+                dye_names = TRUE, ...) {
   new_hid(filepath, raw, ...)
 }
 
@@ -195,4 +198,18 @@ extract_data <- function(raw_data, directory, raw = FALSE) {
       out_parsed
     }
   })
+}
+
+#' @export
+print.hid <- function(x, ...) {
+  cat(
+    "ABIF file object\n",
+    "File format version:", x$header$file_format_version, "\n",
+    "File:", x$file, "\n",
+    "Elements:", x$header$num_elements, "\n",
+    "Instrument:", x$data$MODL.1, "\n",
+    paste("Run date:", x$data$RUND.1), "\n"
+  )
+  # print(x$file_format, ...)
+  invisible(x)
 }

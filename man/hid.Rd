@@ -4,12 +4,16 @@
 \alias{hid}
 \title{Creates an hid object with the data from an .fsa or .hid file.}
 \usage{
-hid(filepath, raw = FALSE, ...)
+hid(filepath, raw = FALSE, friendly_peak_names = TRUE, dye_names = TRUE, ...)
 }
 \arguments{
 \item{filepath}{character vector of length 1. Path to the .fsa or .hid file.}
 
 \item{raw}{logical. When TRUE, returns the raw data for each directory entry instead of the parsed data.}
+
+\item{friendly_peak_names}{logical. When TRUE, uses informative names in the \code{hid_peaks} data frame}
+
+\item{dye_names}{logical. When TRUE, adds dye names to \code{hid_peaks} data frame}
 
 \item{...}{Other parameters to customize the data parsing and/or object format}
 }
