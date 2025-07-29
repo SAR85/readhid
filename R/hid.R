@@ -8,6 +8,11 @@ new_hid <- function(filepath,
   )
 
   x$header <- extract_header(x$raw_data)
+
+  if (x$header$file_format != "ABIF") {
+    stop("File is not in ABIF format: ", filepath)
+  }
+
   x$directory <- extract_directory(
     x$raw_data,
     x$header$directory_offset,
@@ -49,7 +54,7 @@ validate_hid <- function() {
 #'
 hid <- function(filepath, raw = FALSE, friendly_peak_names = TRUE,
                 dye_names = TRUE, ...) {
-  new_hid(filepath, raw, ...)
+  new_hid(filepath, raw, friendly_peak_names, dye_names, ...)
 }
 
 #' Reads an hid file
@@ -210,6 +215,5 @@ print.hid <- function(x, ...) {
     "Instrument:", x$data$MODL.1, "\n",
     paste("Run date:", x$data$RUND.1), "\n"
   )
-  # print(x$file_format, ...)
   invisible(x)
 }
