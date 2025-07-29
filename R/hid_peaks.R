@@ -39,6 +39,8 @@ peaks_to_df <- function(data, friendly_names = TRUE, dye_names = TRUE) {
   # Extract the Peak entries
   peaks <- data[grep("Peak\\.[1-9]+", names(data))]
 
+  if (length(peaks) == 0) return(NULL)
+
   # Split the character data types to make same length as other vectors
   peaks <- lapply(peaks, function(x) {
     if (is.character(x)) {
