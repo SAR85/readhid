@@ -16,9 +16,12 @@ knitr::opts_chunk$set(
 # readhid
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
-The goal of readhid is to ...
+The goal of readhid is to read Applied Biosystems Inc. Format (ABIF) files. These files are created by Applied Biosystems Genetic Analyzers and have file extensions such as .fsa and .hid.
+
+There are other packages that read ABIF format files, however none of them will correctly extract the `DATA` and `Peak` fields from the newer file format, such as the .hid files produced by the 3500 Genetic Analyzer.
 
 ## Installation
 
@@ -31,17 +34,41 @@ pak::pak("SAR85/readhid")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Read ABIF files by calling `hid()` and provide a path to the file:
 
-```{r example}
+```{r, include=FALSE}
 library(readhid)
-## basic example code
+
+my_hid <- hid("tests/testthat/fixtures/A02_RD14-0003-15d2U60-0.25GF-Q4.5_01.15sec.hid")
+my_hid$file <- "path/to/my.hid"
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+```{r example, eval=FALSE}
+library(readhid)
+my_hid <- hid("path/to/my.hid")
 
-```{r cars}
-summary(cars)
+print(my_hid)
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
+The resulting `hid` object will contain data from the ABIF file, including various instrument and run parameters, as well as the raw sequencing or fragment analysis data. All of the data can be accessed in the `data` element of the object. The available data fields vary by instrument model used for data collection.
+
+The data elements can be retrieved using `hid_data()`:
+
+```{r}
+my_hid_data <- hid_data(my_hid)
+
+my_hid_data |> head(5)
+```
+
+The raw sequencing or fragment analysis data are found in the `DATA` fields:
+
+```{r}
+hid_data(my_hid, "DATA") |> names()
+```
+
+Analyzed peak data is extracted, if present, and organized into a data frame. The dataframe can be obtained using `hid_peaks()`.
+
+```{r}
+my_hid_peaks <- hid_peaks(my_hid)
+str(my_hid_peaks)
+```
