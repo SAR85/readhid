@@ -217,3 +217,69 @@ print.hid <- function(x, ...) {
   )
   invisible(x)
 }
+
+#' Extracts the `data` element from an hid object. If `pattern` is specified, returns only the elements of `data` that match pattern using `grep()`.
+#'
+#' @param x hid object
+#' @param pattern character. A string
+#' @param ... Other arguments passed to `grep()`
+#'
+#' @returns list. Invisibly returns the data element of an hid object.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' my_hid_data <- hid_data(my_hid)
+#' # Get the name of the first dye
+#' my_hid_data$DyeN.1
+#' # Get the instrument model name
+#' my_hid_data$MODL.1
+#' # Get all the data elements with "DATA" in the name
+#' hid_data(my_hid, "DATA")
+#' }
+hid_data <- function(x, pattern = NULL, ...) {
+  stopifnot(class(x) == "hid")
+  stopifnot(is.null(pattern) || is.character(pattern))
+  if (is.character(pattern) && length(pattern) > 1) {
+    stop("pattern must be length 1")
+  }
+
+  out <- NULL
+
+  if (!"data" %in% names(x)) {
+    warning("No data in this hid object.")
+  } else {
+    if (is.null(pattern)) {
+      out <- x$data
+    } else {
+      out <- x$data[grep(pattern, names(x$data))]
+    }
+  }
+  invisible(out)
+}
+
+#' Extracts the `hid_peaks` element from an hid object.
+#'
+#' @param x hid object
+#'
+#' @returns dataframe. Invisibly returns the `hid_peaks` element from the hid object
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' my_hid_peaks <- hid_peaks(my_hid)
+#' # Calculate average peak height
+#' mean(my_hid_peaks$height)
+#' }
+hid_peaks <- function(x) {
+  stopifnot(class(x) == "hid")
+
+  out <- NULL
+
+  if (!"hid_peaks" %in% names(x)) {
+    warning("No peak data in this hid object.")
+  } else {
+    out <- x$hid_peaks
+  }
+  invisible(out)
+}

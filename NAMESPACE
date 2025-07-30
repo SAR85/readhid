@@ -2,3 +2,5 @@
 
 S3method(print,hid)
 export(hid)
+export(hid_data)
+export(hid_peaks)
