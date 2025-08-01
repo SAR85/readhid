@@ -1,7 +1,8 @@
 new_hid <- function(filepath,
                     raw = FALSE,
                     friendly_peak_names = TRUE,
-                    dye_names = TRUE) {
+                    dye_names = TRUE,
+                    ...) {
   x <- list(
     file = filepath,
     raw_data = read_hid(filepath)
@@ -122,7 +123,7 @@ extract_directory <- function(raw_data, directory_offset, num_elements) {
     by = 28
   )
 
-  # Extract the standard values based on the ABIF specification
+  # Extract the directory entries
   dir_list <- lapply(entry_offsets, function(x) {
     entry <- extract_directory_entry(raw_data[x:(x + 27)])
 
@@ -252,7 +253,7 @@ hid_data <- function(x, pattern = NULL, ...) {
     if (is.null(pattern)) {
       out <- x$data
     } else {
-      out <- x$data[grep(pattern, names(x$data))]
+      out <- x$data[grep(pattern, names(x$data), ...)]
     }
   }
   invisible(out)
