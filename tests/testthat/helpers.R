@@ -5,7 +5,7 @@ make_example_hids <- function() {
   )
   ex_noraw <- hid(
     test_path("fixtures/A02_RD14-0003-15d2U60-0.25GF-Q4.5_01.15sec.hid"),
-    raw = TRUE
+    raw = FALSE
   )
   saveRDS(ex, test_path("fixtures/example_hid.RDS"))
   saveRDS(ex_noraw, test_path("fixtures/example_noraw.RDS"))
