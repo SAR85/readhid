@@ -3,44 +3,59 @@ new_hid <- function(filepath,
                     friendly_peak_names = TRUE,
                     dye_names = TRUE,
                     ...) {
-  x <- list(
-    file = filepath,
-    raw_data = read_hid(filepath)
-  )
+  # Read the file
+  raw_data <- read_hid(filepath)
+  # Extract the ABIF header
+  header <- extract_header(raw_data)
 
-  x$header <- extract_header(x$raw_data)
-
-  if (x$header$file_format != "ABIF") {
+  if (header$file_format != "ABIF") {
     stop("File is not in ABIF format: ", filepath)
   }
 
-  x$directory <- extract_directory(
-    x$raw_data,
-    x$header$directory_offset,
-    x$header$num_elements
+  # Extract the ABIF directory
+  directory <- extract_directory(
+    raw_data,
+    header$directory_offset,
+    header$num_elements
   )
-  x$data <- extract_data(x$raw_data, x$directory, raw = raw)
 
+  # Parse the data for each entry
+  entry_data <- lapply(directory, function(dir_entry) {
+    parse_data(dir_entry$raw_data, dir_entry$type, dir_entry$num_elements)
+  })
+
+  # Make a data.frame of the Peak entry data
+  peaks <- peaks_to_df(
+    entry_data,
+    friendly_names = friendly_peak_names,
+    dye_names = dye_names
+  )
+
+  # Remove the raw data from directory entries if user doesn't want it
   if (!raw) {
-    x$hid_peaks <- peaks_to_df(
-      x$data,
-      friendly_names = friendly_peak_names,
-      dye_names = dye_names
-    )
+    directory <- lapply(directory, function(dir_entry) {
+      dir_entry$raw_data <- NULL
+      dir_entry
+    })
   }
 
-  structure(x, class = "hid")
-}
+  # Create the list that will become the hid object
+  out <- list(
+    file = filepath,
+    header = header,
+    directory = directory,
+    data = entry_data,
+    peaks = peaks
+  )
+  if (raw) out$raw_data <- raw_data
 
-# Placeholder for hid class validator
-validate_hid <- function() {
-
+  structure(out, class = "hid")
 }
 
 #' Creates an hid object with the data from an .fsa or .hid file.
 #'
 #' @param filepath character vector of length 1. Path to the .fsa or .hid file.
-#' @param raw logical. When TRUE, returns the raw data for each directory entry instead of the parsed data.
+#' @param raw logical. When TRUE, retains the raw_data from the file and each directory entry.
 #' @param ... Other parameters to customize the data parsing and/or object format
 #' @param friendly_peak_names logical. When TRUE, uses informative names in the `hid_peaks` data frame
 #' @param dye_names logical. When TRUE, adds dye names to `hid_peaks` data frame
@@ -111,77 +126,24 @@ extract_header <- function(raw_data) {
 #' @param directory_offset The 0-based offset of the directory in the file. This is not the offset in the raw_data vector, which would larger by 1 due to R's 1-based indexing.
 #' @param num_elements Integer containing the number of directory entries.
 #'
-#' @returns List containing a list for each directory entry.
+#' @returns List of `abif_dir` objects, one for each directory entry.
 #'
 extract_directory <- function(raw_data, directory_offset, num_elements) {
   stopifnot(is.raw(raw_data))
   stopifnot(is.integer(directory_offset))
   stopifnot(is.integer(num_elements))
 
-  entry_offsets <- seq(directory_offset + 1,
-    directory_offset + 28 * num_elements,
+  entry_offsets <- seq(directory_offset,
+    directory_offset + 28L * (num_elements - 1),
     by = 28
   )
 
   # Extract the directory entries
-  dir_list <- lapply(entry_offsets, function(x) {
-    entry <- extract_directory_entry(raw_data[x:(x + 27)])
+  dir_list <- lapply(entry_offsets, function(x) abif_dir(x, raw_data))
 
-    if (entry$type %in% special_types()) {
-      entry$data_offset <- special_data_offset(
-        raw_data,
-        entry$name,
-        entry$num
-      )
-      # Substitute the normal element_type for later parsing
-      entry$type <- element_types(entry$type, get = "sub")
-
-      # Get the number of elements (array length)
-      file_offset <- seek_raw(entry$name, entry$num, raw_data)
-      entry$num_elements <- special_array_length(
-        file_offset,
-        raw_data
-      )
-
-      # Get the element size
-      entry$element_size <- element_types(entry$type, get = "size")
-
-      # Set the data size
-      entry$data_size <- entry$num_elements * entry$element_size
-    }
-    entry
-  })
-
-  names(dir_list) <- sapply(dir_list, function(x) {
-    paste0(x$name, ".", x$num)
-  })
+  names(dir_list) <- sapply(dir_list, function(x) paste0(x$name, ".", x$num))
 
   dir_list
-}
-
-#' Extracts the information for a single ABIF directory entry. This function returns
-#' correct values for standard directory entries but will return incorrect information
-#' for special data types.
-#'
-#' @param raw_data Raw vector of length 28 representing the directory entry.
-#'
-#' @returns List with elements corresponding to the ABIF directory entry information.
-#'
-extract_directory_entry <- function(raw_data) {
-  stopifnot(is.raw(raw_data))
-  stopifnot(length(raw_data) == 28)
-
-  out <- list(
-    name = rtc(raw_data[1:4]),
-    num = int32(raw_data[5:8]),
-    type = int16(raw_data[9:10]),
-    element_size = int16(raw_data[11:12]),
-    num_elements = int32(raw_data[13:16]),
-    data_size = int32(raw_data[17:20]),
-    data_offset = int32(raw_data[21:24])
-    # data_handle = int32(raw_data[25:28])
-  )
-  out
 }
 
 #' Extracts the data associated with all directory entries in a .fsa or .hid file.

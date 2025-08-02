@@ -14,7 +14,7 @@ extract_directory(raw_data, directory_offset, num_elements)
 \item{num_elements}{Integer containing the number of directory entries.}
 }
 \value{
-List containing a list for each directory entry.
+List of \code{abif_dir} objects, one for each directory entry.
 }
 \description{
 Extracts the ABIF directory.

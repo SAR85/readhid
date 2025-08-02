@@ -38,5 +38,5 @@ test_that("hid_data() works", {
 
 test_that("hid_peaks() works", {
   ex <- example_hid()
-  expect_equal(hid_peaks(ex), ex$hid_peaks)
+  expect_equal(hid_peaks(ex), ex$peaks)
 })

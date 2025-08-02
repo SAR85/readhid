@@ -9,7 +9,7 @@ hid(filepath, raw = FALSE, friendly_peak_names = TRUE, dye_names = TRUE, ...)
 \arguments{
 \item{filepath}{character vector of length 1. Path to the .fsa or .hid file.}
 
-\item{raw}{logical. When TRUE, returns the raw data for each directory entry instead of the parsed data.}
+\item{raw}{logical. When TRUE, retains the raw_data from the file and each directory entry.}
 
 \item{friendly_peak_names}{logical. When TRUE, uses informative names in the \code{hid_peaks} data frame}
 
