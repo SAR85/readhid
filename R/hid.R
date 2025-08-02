@@ -239,10 +239,10 @@ hid_peaks <- function(x) {
 
   out <- NULL
 
-  if (!"hid_peaks" %in% names(x)) {
+  if (!"peaks" %in% names(x)) {
     warning("No peak data in this hid object.")
   } else {
-    out <- x$hid_peaks
+    out <- x$peaks
   }
   invisible(out)
 }
