@@ -6,11 +6,7 @@ new_hid <- function(filepath,
   # Read the file
   raw_data <- read_hid(filepath)
   # Extract the ABIF header
-  header <- extract_header(raw_data)
-
-  if (header$file_format != "ABIF") {
-    stop("File is not in ABIF format: ", filepath)
-  }
+  header <- abif_head(raw_data[1:30])
 
   # Extract the ABIF directory
   directory <- extract_directory(
@@ -68,7 +64,8 @@ new_hid <- function(filepath,
 #' my_hid_file <- hid("/path/to/file.hid")
 #' }
 #'
-hid <- function(filepath, raw = FALSE, friendly_peak_names = TRUE,
+hid <- function(filepath, raw = FALSE,
+                friendly_peak_names = TRUE,
                 dye_names = TRUE, ...) {
   new_hid(filepath, raw, friendly_peak_names, dye_names, ...)
 }
@@ -96,28 +93,6 @@ read_hid <- function(filepath, ...) {
   close(hid_file)
 
   out
-}
-
-#' Extracts the ABIF header
-#'
-#' @param raw_data Raw vector with contents of .fsa or .hid file.
-#'
-#' @returns List with elements corresponding to the ABIF header information.
-#'
-extract_header <- function(raw_data) {
-  list(
-    file_format = rtc(raw_data[1:4]),
-    file_format_version = int16(raw_data[5:6]),
-    name = rtc(raw_data[7:10]),
-    num = int32(raw_data[11:14]),
-    type = int16(raw_data[15:16]),
-    element_size = int16(raw_data[17:18]),
-    num_elements = int32(raw_data[19:22]),
-    directory_size = int32(raw_data[23:26]),
-    directory_offset = int32(raw_data[27:30])
-    # data_handle = int32(raw_data[31:34]),
-    # unused_bytes = int16(raw_data[35:128], n = 47)
-  )
 }
 
 #' Extracts the ABIF directory.
