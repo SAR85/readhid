@@ -53,24 +53,24 @@ abif_dir <- function(dir_raw, file_raw) {
 }
 
 #' @export
-print.abif_dir <- function(dir_entry) {
-  stopifnot(class(dir_entry) == "abif_dir")
+print.abif_dir <- function(x, ...) {
+  stopifnot(class(x) == "abif_dir")
 
   cat(
     "ABIF directory entry\n",
-    "Name:", dir_entry$name,"\n",
-    "Number:", dir_entry$num, "\n",
-    "Type:", dir_entry$type,
-    paste0("(", element_types(dir_entry$type, "name"), ")"), "\n",
-    "Element size:", dir_entry$element_size, "bytes\n",
-    "Num. elements:", format(dir_entry$num_elements, big.mark = ","), "\n",
-    "Data size:", format(dir_entry$data_size, big.mark = ","), "bytes\n",
-    "Data offset:", dir_entry$data_offset, "\n"
+    "Name:", x$name,"\n",
+    "Number:", x$num, "\n",
+    "Type:", x$type,
+    paste0("(", element_types(x$type, "name"), ")"), "\n",
+    "Element size:", x$element_size, "bytes\n",
+    "Num. elements:", format(x$num_elements, big.mark = ","), "\n",
+    "Data size:", format(x$data_size, big.mark = ","), "bytes\n",
+    "Data offset:", x$data_offset, "\n"
   )
-  if(!is.null(attr(dir_entry, "special_type"))) {
+  if(!is.null(attr(x, "special_type"))) {
     cat(
-      "Special type:", attr(dir_entry, "special_type")
+      "Special type:", attr(x, "special_type")
     )
   }
-  invisible(dir_entry)
+  invisible(x)
 }

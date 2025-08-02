@@ -2,9 +2,9 @@ test_that("hid() works", {
   ex <- example_hid()
   path <- test_path("fixtures/A02_RD14-0003-15d2U60-0.25GF-Q4.5_01.15sec.hid")
 
-  expect_no_error(hid(path))
+  expect_no_error(hid(path, raw = TRUE))
 
-  test_hid <- hid(path)
+  test_hid <- hid(path, raw = TRUE)
 
   test_hid$file <- NULL
   ex$file <- NULL
@@ -15,7 +15,7 @@ test_that("new_hid() works", {
   ex <- example_hid()
   path <- test_path("fixtures/A02_RD14-0003-15d2U60-0.25GF-Q4.5_01.15sec.hid")
 
-  test_hid <- new_hid(path)
+  test_hid <- new_hid(path, raw = TRUE)
   test_hid$file <- NULL
   ex$file <- NULL
   expect_identical(test_hid, ex)
