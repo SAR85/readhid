@@ -60,6 +60,6 @@ test_that("parse_data() works for element type 1", {
       ex$directory$AAct.1$type,
       ex$directory$AAct.1$num_elements
     ),
-    ex$data$AAct.1
+    ex$directory$AAct.1$parsed_data
   )
 })

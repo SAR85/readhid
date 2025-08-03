@@ -1,49 +1,38 @@
 new_hid <- function(filepath,
-                    raw = FALSE,
+                    keep_data = c("parsed", "raw", "both", "none"),
                     friendly_peak_names = TRUE,
                     dye_names = TRUE,
                     ...) {
+  if ("both" %in% keep_data) keep_data <- c("parsed", "raw")
+
   # Read the file
   raw_data <- read_hid(filepath)
+
   # Extract the ABIF header
-  header <- abif_head(raw_data[1:30])
+  header <- abif_head(raw_data[1:128])
 
   # Extract the ABIF directory
-  directory <- extract_directory(
-    raw_data,
-    header$directory_offset,
-    header$num_elements
+  dir_entry_offsets <- seq(dir_offset(header),
+    dir_offset(header) + 28L * (dir_n(header) - 1),
+    by = 28
   )
 
-  # Parse the data for each entry
-  entry_data <- lapply(directory, function(dir_entry) {
-    parse_data(dir_entry$raw_data, dir_entry$type, dir_entry$num_elements)
-  })
-
-  # Make a data.frame of the Peak entry data
-  peaks <- peaks_to_df(
-    entry_data,
-    friendly_names = friendly_peak_names,
-    dye_names = dye_names
+  dir_list <- lapply(
+    dir_entry_offsets,
+    function(x) abif_dir(x, raw_data, keep_data = keep_data)
   )
-
-  # Remove the raw data from directory entries if user doesn't want it
-  if (!raw) {
-    directory <- lapply(directory, function(dir_entry) {
-      dir_entry$raw_data <- NULL
-      dir_entry
-    })
-  }
+  names(dir_list) <- sapply(
+    dir_list,
+    function(x) dir_name(x, include_num = TRUE)
+  )
 
   # Create the list that will become the hid object
   out <- list(
     file = filepath,
     header = header,
-    directory = directory,
-    data = entry_data,
-    peaks = peaks
+    directory = dir_list
   )
-  if (raw) out$raw_data <- raw_data
+  if ("raw" %in% keep_data) out$raw_data <- raw_data
 
   structure(out, class = "hid")
 }
@@ -51,7 +40,9 @@ new_hid <- function(filepath,
 #' Creates an hid object with the data from an .fsa or .hid file.
 #'
 #' @param filepath character vector of length 1. Path to the .fsa or .hid file.
-#' @param raw logical. When TRUE, retains the raw_data from the file and each directory entry.
+#' @param keep_data character. Specifies what directory entry data to keep
+#' (raw, parsed, both, or none). If "raw" or "both", also keeps the entire file
+#' raw data.
 #' @param ... Other parameters to customize the data parsing and/or object format
 #' @param friendly_peak_names logical. When TRUE, uses informative names in the `hid_peaks` data frame
 #' @param dye_names logical. When TRUE, adds dye names to `hid_peaks` data frame
@@ -64,10 +55,11 @@ new_hid <- function(filepath,
 #' my_hid_file <- hid("/path/to/file.hid")
 #' }
 #'
-hid <- function(filepath, raw = FALSE,
+hid <- function(filepath,
+                keep_data = c("parsed", "raw", "both", "none"),
                 friendly_peak_names = TRUE,
                 dye_names = TRUE, ...) {
-  new_hid(filepath, raw, friendly_peak_names, dye_names, ...)
+  new_hid(filepath, keep_data, friendly_peak_names, dye_names, ...)
 }
 
 #' Reads an hid file
@@ -93,32 +85,6 @@ read_hid <- function(filepath, ...) {
   close(hid_file)
 
   out
-}
-
-#' Extracts the ABIF directory.
-#'
-#' @param raw_data Raw vector containing the contents of a .fsa or .hid file.
-#' @param directory_offset The 0-based offset of the directory in the file. This is not the offset in the raw_data vector, which would larger by 1 due to R's 1-based indexing.
-#' @param num_elements Integer containing the number of directory entries.
-#'
-#' @returns List of `abif_dir` objects, one for each directory entry.
-#'
-extract_directory <- function(raw_data, directory_offset, num_elements) {
-  stopifnot(is.raw(raw_data))
-  stopifnot(is.integer(directory_offset))
-  stopifnot(is.integer(num_elements))
-
-  entry_offsets <- seq(directory_offset,
-    directory_offset + 28L * (num_elements - 1),
-    by = 28
-  )
-
-  # Extract the directory entries
-  dir_list <- lapply(entry_offsets, function(x) abif_dir(x, raw_data))
-
-  names(dir_list) <- sapply(dir_list, function(x) paste0(x$name, ".", x$num))
-
-  dir_list
 }
 
 #' Extracts the data associated with all directory entries in a .fsa or .hid file.
@@ -159,7 +125,8 @@ print.hid <- function(x, ...) {
 #' Extracts the `data` element from an hid object. If `pattern` is specified, returns only the elements of `data` that match pattern using `grep()`.
 #'
 #' @param x hid object
-#' @param pattern character. A string
+#' @param pattern character. A string containing the data name to search for. Passed to `grep()`.
+#' @param what character. Specifies what directory entry data to keep.
 #' @param ... Other arguments passed to `grep()`
 #'
 #' @returns list. Invisibly returns the data element of an hid object.
@@ -175,24 +142,24 @@ print.hid <- function(x, ...) {
 #' # Get all the data elements with "DATA" in the name
 #' hid_data(my_hid, "DATA")
 #' }
-hid_data <- function(x, pattern = NULL, ...) {
+hid_data <- function(x, pattern = NULL,
+                     what = c("parsed", "raw", "both"),
+                     ...) {
   stopifnot(class(x) == "hid")
   stopifnot(is.null(pattern) || is.character(pattern))
   if (is.character(pattern) && length(pattern) > 1) {
     stop("pattern must be length 1")
   }
 
-  out <- NULL
-
-  if (!"data" %in% names(x)) {
-    warning("No data in this hid object.")
+  if (is.null(pattern)) {
+    dir_names <- names(x$directory)
   } else {
-    if (is.null(pattern)) {
-      out <- x$data
-    } else {
-      out <- x$data[grep(pattern, names(x$data), ...)]
-    }
+    dir_names <- grep(pattern, names(x$directory), ...)
   }
+
+  out <- lapply(x$directory[dir_names], function(dir_entry) {
+    dir_data(dir_entry, what)
+  })
   invisible(out)
 }
 
@@ -212,12 +179,9 @@ hid_data <- function(x, pattern = NULL, ...) {
 hid_peaks <- function(x) {
   stopifnot(class(x) == "hid")
 
-  out <- NULL
+  parsed_peaks <- hid_data(x, pattern = "Peak\\.[1-9]+", what = "parsed")
+  parsed_peaks <- lapply(parsed_peaks, function(y) y$parsed_data)
+  out <- peaks_to_df(parsed_peaks)
 
-  if (!"peaks" %in% names(x)) {
-    warning("No peak data in this hid object.")
-  } else {
-    out <- x$peaks
-  }
   invisible(out)
 }

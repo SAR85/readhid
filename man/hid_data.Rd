@@ -4,12 +4,14 @@
 \alias{hid_data}
 \title{Extracts the \code{data} element from an hid object. If \code{pattern} is specified, returns only the elements of \code{data} that match pattern using \code{grep()}.}
 \usage{
-hid_data(x, pattern = NULL, ...)
+hid_data(x, pattern = NULL, what = c("parsed", "raw", "both"), ...)
 }
 \arguments{
 \item{x}{hid object}
 
-\item{pattern}{character. A string}
+\item{pattern}{character. A string containing the data name to search for. Passed to \code{grep()}.}
+
+\item{what}{character. Specifies what directory entry data to keep.}
 
 \item{...}{Other arguments passed to \code{grep()}}
 }
