@@ -2,13 +2,19 @@
 % Please edit documentation in R/hid_data.R
 \name{special_types}
 \alias{special_types}
-\title{Returns vector of the "special" element types found in .hid files}
+\title{Returns vector of the "special" element types found in newer version of
+ABIF files, such as .hid files produced by the 3500 Genetic Analyzer.}
 \usage{
 special_types()
 }
 \value{
-Vector of integers
+integer vector representing the special element types.
 }
 \description{
-Returns vector of the "special" element types found in .hid files
+Returns vector of the "special" element types found in newer version of
+ABIF files, such as .hid files produced by the 3500 Genetic Analyzer.
+}
+\examples{
+ifelse(32L \%in\% special_types(), print("32 is special"), print("32 isn't special"))
+
 }

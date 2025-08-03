@@ -48,8 +48,16 @@ new_abif_dir <- function(dir_offset, file_raw) {
   structure(out, class = "abif_dir")
 }
 
-abif_dir <- function(dir_raw, file_raw) {
-  new_abif_dir(dir_raw, file_raw)
+#' Create a new ABIF directory object from raw data.
+#'
+#' @param dir_offset integer. Offset of the directory entry in file_raw.
+#' @param file_raw  raw. Data containing the directory entry.
+#'
+#' @returns abif_dir object containing the directory entry information.
+#' @export
+#'
+abif_dir <- function(dir_offset, file_raw) {
+  new_abif_dir(dir_offset, file_raw)
 }
 
 #' @export
