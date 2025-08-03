@@ -5,6 +5,7 @@
 #' @param ... Other arguments to pass to `readBin()`
 #'
 #' @returns Integer vector
+#' @export
 #'
 int32 <- function(f, n = 1L, ...) {
   readBin(
@@ -25,6 +26,7 @@ int32 <- function(f, n = 1L, ...) {
 #' @param ... Other arguments to pass to `readBin()`
 #'
 #' @returns Integer vector
+#' @export
 #'
 int16 <- function(f, n = 1L, ...) {
   readBin(
@@ -45,6 +47,7 @@ int16 <- function(f, n = 1L, ...) {
 #' @param ... Other arguments to pass to `readBin()`
 #'
 #' @returns Integer vector
+#' @export
 #'
 int8 <- function(f, n = 1L, ...) {
   readBin(
@@ -65,6 +68,7 @@ int8 <- function(f, n = 1L, ...) {
 #' @param ... Other arguments to pass to `readBin()`
 #'
 #' @returns Integer vector
+#' @export
 #'
 uint16 <- function(f, n = 1L, ...) {
   readBin(
@@ -85,6 +89,7 @@ uint16 <- function(f, n = 1L, ...) {
 #' @param ... Other arguments to pass to `readBin()`
 #'
 #' @returns Integer vector
+#' @export
 #'
 uint8 <- function(f, n = 1L,...) {
   readBin(
@@ -105,6 +110,7 @@ uint8 <- function(f, n = 1L,...) {
 #' @param ... Other arguments to pass to `readBin()`
 #'
 #' @returns Double vector
+#' @export
 #'
 float32 <- function(f, n = 1L, ...) {
   readBin(f, what = "numeric", endian = "big", size = 4, n = n, ...)
@@ -117,6 +123,7 @@ float32 <- function(f, n = 1L, ...) {
 #' @param ... Other arguments to pass to `readBin()`
 #'
 #' @returns Double vector
+#' @export
 #'
 float64 <- function(f, n = 1L, ...) {
   readBin(f, what = "numeric", endian = "big", size = 8, n = n, ...)
@@ -128,6 +135,7 @@ float64 <- function(f, n = 1L, ...) {
 #' @param ... Other arguments to pass to `rawToChar()`
 #'
 #' @returns Character vector
+#' @export
 #'
 rtc <- function(x, ...) {
   suppressWarnings(rawToChar(x, ...))
@@ -139,6 +147,7 @@ rtc <- function(x, ...) {
 #' @param ... Other arguments passed to `as.Date()`
 #'
 #' @returns Date vector of length 1
+#' @export
 #'
 hidDate <- function(f, ...) {
   year <- int16(f, n = 1)
@@ -153,6 +162,7 @@ hidDate <- function(f, ...) {
 #' @param f Raw vector
 #'
 #' @returns List of the hour, minute, second, and hsecond data
+#' @export
 #'
 hidTime <- function(f) {
   list(
@@ -163,6 +173,13 @@ hidTime <- function(f) {
   )
 }
 
+#' Parses the char element type of ABIF files from raw data.
+#'
+#' @param f Raw vector
+#'
+#' @returns Character vector
+#' @export
+#'
 char <- function(f) {
   tryCatch(
     rtc(f),
@@ -170,6 +187,13 @@ char <- function(f) {
   )
 }
 
+#' Parses the pString element type of ABIF files from raw data.
+#'
+#' @param f Raw vector
+#'
+#' @returns Character vector
+#' @export
+#'
 pString <- function(f) {
   n <- int8(f[1])
   rtc(f[2:(2 + n)])

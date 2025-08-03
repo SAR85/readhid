@@ -1,22 +1,51 @@
-#' Returns vector of the "special" element types found in .hid files
+#' Returns vector of the "special" element types found in newer version of
+#' ABIF files, such as .hid files produced by the 3500 Genetic Analyzer.
 #'
-#' @returns Vector of integers
+#' @returns integer vector representing the special element types.
+#' @export
+#'
+#' @examples
+#' ifelse(32L %in% special_types(), print("32 is special"), print("32 isn't special"))
 #'
 special_types <- function() {
   c(28L, 30L:34L)
 }
 
-#' Returns the name, element type, element size, or substitute element type for
-#' a given element type.
+#' Returns the name, element size, substitute element type, or
+#' the name of the function used to parse the element type.
+#'
+#' Return value depends on the `get` parameter:
+#' "name" returns a string with the name of the element type
+#'
+#' "size" returns an integer with the element size for the element type
+#'
+#' "sub" returns an integer with the standard element type substitute. For
+#' special element types, this will be the standard element type used to parse
+#' the data. For normal element types, this will be the same as the element type.
+#'
+#' "parse_fun" returns a string with the name of the function used to parse the
+#' element type.
 #'
 #' @param element_type Integer vector of length 1 to look up
 #' @param get Character vector of length 1 specifying the data to return
 #'
 #' @returns Character vector or integer vector of length 1. Depends on value of `get`
+#' @export
+#'
+#' @seealso [special_types()]
+#' @examples
+#' # Element type 33 is a special type. The equivalent standard type can be found
+#' # using "sub":
+#' element_types(33L, "sub")
+#'
+#' # Retrieve the parsing function for an element type:
+#' parse_fun <- match.fun(element_types(13L, "parse_fun"))
+#' identical(parse_fun, as.logical)
+#' parse_fun(as.raw(0x01), n = 1)
 #'
 element_types <- function(
     element_type,
-    get = c("name", "type", "size", "sub", "parse_fun")) {
+    get = c("name", "size", "sub", "parse_fun")) {
   stopifnot(is.integer(element_type))
 
   df <- data.frame(
