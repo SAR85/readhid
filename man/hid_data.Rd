@@ -2,7 +2,7 @@
 % Please edit documentation in R/hid.R
 \name{hid_data}
 \alias{hid_data}
-\title{Extracts the \code{data} element from an hid object. If \code{pattern} is specified, returns only the elements of \code{data} that match pattern using \code{grep()}.}
+\title{Extracts the \code{data} element from an hid object.}
 \usage{
 hid_data(x, pattern = NULL, what = c("parsed", "raw", "both"), ...)
 }
@@ -19,7 +19,8 @@ hid_data(x, pattern = NULL, what = c("parsed", "raw", "both"), ...)
 list. Invisibly returns the data element of an hid object.
 }
 \description{
-Extracts the \code{data} element from an hid object. If \code{pattern} is specified, returns only the elements of \code{data} that match pattern using \code{grep()}.
+If \code{pattern} is specified, returns data from only the directory entries that
+match \code{pattern} using \code{grep()}.
 }
 \examples{
 \dontrun{

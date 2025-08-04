@@ -1,8 +1,10 @@
 new_abif_dir <- function(dir_offset,
-                         file_raw, keep_data = c("parsed", "raw", "both", "none")) {
+                         file_raw,
+                         keep_data = c("parsed", "raw", "both", "none")) {
   stopifnot(dir_offset + 28 <= length(file_raw))
 
-  if ("both" %in% keep_data) keep_data <- c("parsed", "raw")
+  keep_data <- match.arg(keep_data)
+  if (keep_data == "both") keep_data <- c("parsed", "raw")
 
   dir_raw <- file_raw[(dir_offset + 1):(dir_offset + 28)]
 
@@ -47,16 +49,17 @@ new_abif_dir <- function(dir_offset,
   }
 
   if (!("none" %in% keep_data)) {
-    raw_data <- extract_raw_data(
-      file_raw,
-      out$data_offset,
-      out$data_size
+    raw_data <- abif_dat(
+      extract_raw_data(
+        file_raw,
+        out$data_offset,
+        out$data_size
+      ),
+      out$type
     )
   }
   if ("raw" %in% keep_data) out$raw_data <- raw_data
-  if ("parsed" %in% keep_data) {
-    out$parsed_data <- parse_data(raw_data, out$type, out$num_elements)
-  }
+  if ("parsed" %in% keep_data) out$parsed_data <- parse_dat(raw_data)
 
   structure(out, class = "abif_dir")
 }
@@ -239,7 +242,7 @@ dir_data <- function(directory, what = c("parsed", "raw", "both")) {
 
 #' @export
 dir_data.abif_dir <- function(directory,
-                             what = c("parsed", "raw", "both")) {
+                              what = c("parsed", "raw", "both")) {
   if ("both" %in% what) what <- c("parsed", "raw")
 
   out <- directory[paste0(what, "_data")]

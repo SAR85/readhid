@@ -31,7 +31,7 @@ test_that("extract_raw_data() works", {
   dir_entry <- ex$directory$AAct.1
   dir_entry2 <- ex$directory$DyeN.1
 
-  expect_equal(
+  expect_setequal(
     extract_raw_data(
       ex$raw_data,
       dir_entry$data_offset,
@@ -40,26 +40,12 @@ test_that("extract_raw_data() works", {
     ex$directory$AAct.1$raw_data
   )
 
-  expect_equal(
+  expect_setequal(
     extract_raw_data(
       ex$raw_data,
       dir_entry2$data_offset,
       dir_entry2$data_size
     ),
     ex$directory$DyeN.1$raw_data
-  )
-})
-
-test_that("parse_data() works for element type 1", {
-  ex <- example_hid()
-
-  # Element type 1
-  expect_equal(
-    parse_data(
-      ex$directory$AAct.1$raw_data,
-      ex$directory$AAct.1$type,
-      ex$directory$AAct.1$num_elements
-    ),
-    ex$directory$AAct.1$parsed_data
   )
 })

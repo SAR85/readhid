@@ -3,7 +3,13 @@ new_hid <- function(filepath,
                     friendly_peak_names = TRUE,
                     dye_names = TRUE,
                     ...) {
-  if ("both" %in% keep_data) keep_data <- c("parsed", "raw")
+  keep_data <- match.arg(keep_data)
+  both <- FALSE
+
+  if (keep_data == "both") {
+    both <- TRUE
+    keep_data <- c("parsed", "raw")
+  }
 
   # Read the file
   raw_data <- read_hid(filepath)
@@ -19,7 +25,12 @@ new_hid <- function(filepath,
 
   dir_list <- lapply(
     dir_entry_offsets,
-    function(x) abif_dir(x, raw_data, keep_data = keep_data)
+    function(x) {
+      abif_dir(x,
+        raw_data,
+        keep_data = ifelse(both, "both", keep_data)
+      )
+    }
   )
   names(dir_list) <- sapply(
     dir_list,
@@ -122,7 +133,10 @@ print.hid <- function(x, ...) {
   invisible(x)
 }
 
-#' Extracts the `data` element from an hid object. If `pattern` is specified, returns only the elements of `data` that match pattern using `grep()`.
+#' Extracts the `data` element from an hid object.
+#'
+#' If `pattern` is specified, returns data from only the directory entries that
+#' match `pattern` using `grep()`.
 #'
 #' @param x hid object
 #' @param pattern character. A string containing the data name to search for. Passed to `grep()`.
@@ -180,7 +194,7 @@ hid_peaks <- function(x) {
   stopifnot(class(x) == "hid")
 
   parsed_peaks <- hid_data(x, pattern = "Peak\\.[1-9]+", what = "parsed")
-  parsed_peaks <- lapply(parsed_peaks, function(y) y$parsed_data)
+  parsed_peaks <- lapply(parsed_peaks, `[[`, "parsed_data")
   out <- peaks_to_df(parsed_peaks)
 
   invisible(out)
