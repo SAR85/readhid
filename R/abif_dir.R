@@ -234,8 +234,6 @@ dir_offset.abif_dir <- function(directory) {
 #' @returns list containing the directory entry's data
 #' @export
 #'
-#' @seealso [parse_data()]
-#'
 dir_data <- function(directory, what = c("parsed", "raw", "both")) {
   UseMethod("dir_data")
 }

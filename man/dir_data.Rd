@@ -18,6 +18,3 @@ list containing the directory entry's data
 \description{
 Extracts the data of an ABIF directory object.
 }
-\seealso{
-\code{\link[=parse_data]{parse_data()}}
-}

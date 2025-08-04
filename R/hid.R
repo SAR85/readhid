@@ -98,28 +98,6 @@ read_hid <- function(filepath, ...) {
   out
 }
 
-#' Extracts the data associated with all directory entries in a .fsa or .hid file.
-#'
-#' @param raw_data Raw vector from .fsa or .hid file.
-#' @param directory List representing the ABIF directory.
-#' @param raw logical indicating whether to return raw data or parsed data
-#'
-#' @returns List containing an element with the data for each directory entry.
-#' Returns the raw data when `raw = TRUE`
-#'
-extract_data <- function(raw_data, directory, raw = FALSE) {
-  lapply(directory, function(x) {
-    out_raw <- extract_raw_data(raw_data, x$data_offset, x$data_size)
-    out_parsed <- parse_data(out_raw, x$type, x$num_elements)
-
-    if (raw) {
-      out_raw
-    } else {
-      out_parsed
-    }
-  })
-}
-
 #' @export
 print.hid <- function(x, ...) {
   cat(
