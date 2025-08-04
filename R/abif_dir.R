@@ -241,7 +241,8 @@ dir_data <- function(directory, what = c("parsed", "raw", "both")) {
 #' @export
 dir_data.abif_dir <- function(directory,
                               what = c("parsed", "raw", "both")) {
-  if ("both" %in% what) what <- c("parsed", "raw")
+  what <- match.arg(what)
+  if (what == "both") what <- c("parsed", "raw")
 
   out <- directory[paste0(what, "_data")]
 

@@ -143,6 +143,8 @@ hid_data <- function(x, pattern = NULL,
     stop("pattern must be length 1")
   }
 
+  what <- match.arg(what)
+
   if (is.null(pattern)) {
     dir_names <- names(x$directory)
   } else {
