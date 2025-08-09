@@ -1,6 +1,9 @@
-new_abif_peaks <- function(directory, friendly_names = TRUE, dye_names = TRUE) {
+new_abif_peaks <- function(x, friendly_names = TRUE, dye_names = TRUE) {
+  if (is(x, "hid")) x <- x$directory
+  if (is.null(x)) stop("No directory found in x.")
+
   # Extract the Peak entries from the directory
-  peaks <- directory[grep("Peak\\.[1-9]+", names(directory))]
+  peaks <- x[grep("Peak\\.[1-9]+", names(x))]
 
   # Check for Peak entries and exit if none found
   if (length(peaks) == 0) {
@@ -54,13 +57,23 @@ new_abif_peaks <- function(directory, friendly_names = TRUE, dye_names = TRUE) {
   }
 
   # Add dye names according to dye_names
-  if (dye_names) peaks <- merge(peaks, dye_names(directory), all.x = TRUE)
+  if (dye_names) peaks <- merge(peaks, dye_names(x), all.x = TRUE)
 
   structure(peaks, class = c("abif_peaks", class(peaks)))
 }
 
-abif_peaks <- function(directory, friendly_names = TRUE, dye_names = TRUE) {
-  new_abif_peaks(directory, friendly_names, dye_names)
+#' Creates a data.frame from the `Peak` data in an ABIF file.
+#'
+#' @param x hid or abif_dir object.
+#' @param friendly_names logical. Whether to rename columns with more
+#' meaningful names or use the directory entry names.
+#' @param dye_names logical. Whether to add dye names to the output data.frame.
+#'
+#' @returns data.frame created from the `Peak` entries in x.
+#' @export
+#'
+abif_peaks <- function(x, friendly_names = TRUE, dye_names = TRUE) {
+  new_abif_peaks(x, friendly_names, dye_names)
 }
 
 friendly_peak_names <- function() {
