@@ -43,33 +43,44 @@ sequencing or fragment analysis data. All of the data can be accessed in
 the `data` element of the object. The available data fields vary by
 instrument model used for data collection.
 
-The data elements can be retrieved using `hid_data()`:
+The data elements can be retrieved using `dir_data()`:
 
 ``` r
-my_hid_data <- hid_data(my_hid)
+my_hid_data <- dir_data(my_hid)
 
 my_hid_data |> head(5)
 #> $AAct.1
-#> [1] TRUE
-#> 
+#> ABIF data object
+#>  Data type: 13 (logical)
+#>  Num. elements: 1 
+#>  Raw data: FALSE
 #> $ABED.1
-#> [1] "2016-05-13 08:00:00.0"
-#> 
+#> ABIF data object
+#>  Data type: 19 (cString)
+#>  Num. elements: 1 
+#>  Raw data: FALSE
 #> $ABID.1
-#> [1] "2016-01-06 15:05:00.0"
-#> 
+#> ABIF data object
+#>  Data type: 19 (cString)
+#>  Num. elements: 1 
+#>  Raw data: FALSE
 #> $ABLt.1
-#> [1] "1508263"
-#> 
+#> ABIF data object
+#>  Data type: 19 (cString)
+#>  Num. elements: 1 
+#>  Raw data: FALSE
 #> $ABRn.1
-#> [1] 5
+#> ABIF data object
+#>  Data type: 5 (long)
+#>  Num. elements: 1 
+#>  Raw data: FALSE
 ```
 
 The raw sequencing or fragment analysis data are found in the `DATA`
 fields:
 
 ``` r
-hid_data(my_hid, "DATA") |> names()
+dir_data(my_hid, "DATA") |> names()
 #>  [1] "DATA.1"   "DATA.2"   "DATA.3"   "DATA.4"   "DATA.5"   "DATA.6"  
 #>  [7] "DATA.7"   "DATA.8"   "DATA.9"   "DATA.10"  "DATA.11"  "DATA.12" 
 #> [13] "DATA.105" "DATA.106" "DATA.205" "DATA.206"
@@ -79,9 +90,9 @@ Analyzed peak data is extracted, if present, and organized into a data
 frame. The dataframe can be obtained using `hid_peaks()`.
 
 ``` r
-my_hid_peaks <- hid_peaks(my_hid)
+my_hid_peaks <- abif_peaks(my_hid)
 str(my_hid_peaks)
-#> 'data.frame':    93 obs. of  24 variables:
+#> Classes 'abif_peaks' and 'data.frame':   93 obs. of  24 variables:
 #>  $ dye_index        : int  1 1 1 1 1 1 1 1 1 1 ...
 #>  $ data_point       : int  4560 4613 4669 5260 5358 6145 6192 6639 6819 7291 ...
 #>  $ begin_data_point : int  4548 4600 4657 5248 5346 6133 6176 6626 6804 7272 ...

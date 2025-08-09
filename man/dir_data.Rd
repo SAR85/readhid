@@ -30,12 +30,9 @@ names that match \code{pattern} using \code{grep()}.
 }
 \examples{
 \dontrun{
-my_hid_data <- hid_data(my_hid)
-# Get the name of the first dye
-my_hid_data$DyeN.1
-# Get the instrument model name
-my_hid_data$MODL.1
+# Get the name of the first dye from an hid object
+dir_data(my_hid, pattern = "DyeN.1", what = "parsed")
 # Get all the data elements with "DATA" in the name
-hid_data(my_hid, "DATA")
+dir_data(my_hid, pattern = "DATA")
 }
 }

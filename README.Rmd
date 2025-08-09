@@ -52,10 +52,10 @@ print(my_hid)
 
 The resulting `hid` object will contain data from the ABIF file, including various instrument and run parameters, as well as the raw sequencing or fragment analysis data. All of the data can be accessed in the `data` element of the object. The available data fields vary by instrument model used for data collection.
 
-The data elements can be retrieved using `hid_data()`:
+The data elements can be retrieved using `dir_data()`:
 
 ```{r}
-my_hid_data <- hid_data(my_hid)
+my_hid_data <- dir_data(my_hid)
 
 my_hid_data |> head(5)
 ```
@@ -63,12 +63,12 @@ my_hid_data |> head(5)
 The raw sequencing or fragment analysis data are found in the `DATA` fields:
 
 ```{r}
-hid_data(my_hid, "DATA") |> names()
+dir_data(my_hid, "DATA") |> names()
 ```
 
 Analyzed peak data is extracted, if present, and organized into a data frame. The dataframe can be obtained using `hid_peaks()`.
 
 ```{r}
-my_hid_peaks <- hid_peaks(my_hid)
+my_hid_peaks <- abif_peaks(my_hid)
 str(my_hid_peaks)
 ```
