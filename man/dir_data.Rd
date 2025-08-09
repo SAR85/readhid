@@ -2,19 +2,40 @@
 % Please edit documentation in R/abif_dir.R
 \name{dir_data}
 \alias{dir_data}
-\title{Extracts the data of an ABIF directory object.}
+\title{#' Extracts data from ABIF directory entries. This is a generic function so
+methods can support objects such as hid, list, and individual directory
+entries (abif_dir).}
 \usage{
-dir_data(directory, what = c("parsed", "raw", "both"))
+dir_data(x, pattern = NULL, what = c("parsed", "raw"), ...)
 }
 \arguments{
-\item{directory}{abif_dir. The ABIF directory object.}
+\item{x}{object from which to extract data.}
 
-\item{what}{character. Specifies what directory entry data to keep.
-(raw, parsed, both).}
+\item{pattern}{character. A string containing the directory entry name(s)
+to search for. Passed to \code{grep()}.}
+
+\item{what}{character. Specifies what directory entry data to keep ("parsed"
+or "raw").}
+
+\item{...}{Other arguments passed to \code{grep()}}
 }
 \value{
-list containing the directory entry's data
+invisibly returns the matching data element(s). Object type matches
+the form of \code{x}: an hid object or list will return a list and an abif_dir
+object will return a vector.
 }
 \description{
-Extracts the data of an ABIF directory object.
+If \code{pattern} is specified, returns data from only the directory entries with
+names that match \code{pattern} using \code{grep()}.
+}
+\examples{
+\dontrun{
+my_hid_data <- hid_data(my_hid)
+# Get the name of the first dye
+my_hid_data$DyeN.1
+# Get the instrument model name
+my_hid_data$MODL.1
+# Get all the data elements with "DATA" in the name
+hid_data(my_hid, "DATA")
+}
 }

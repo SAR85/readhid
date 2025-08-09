@@ -94,7 +94,7 @@ friendly_peak_names <- function() {
 }
 
 dye_names <- function(directory) {
-  num_dyes <- dir_data(directory$`Dye#.1`, "parsed")$parsed_data # TODO: update dir_data to not return a list
+  num_dyes <- dir_data(directory$`Dye#.1`, "parsed")
   dyes <- directory[grep("DyeN\\.[0-9]+", names(directory))]
   list(
     dye_index = seq(num_dyes),

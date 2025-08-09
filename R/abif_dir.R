@@ -230,26 +230,76 @@ dir_offset.abif_dir <- function(directory) {
   directory$data_offset
 }
 
-#' Extracts the data of an ABIF directory object.
+#' #' Extracts data from ABIF directory entries. This is a generic function so
+#' methods can support objects such as hid, list, and individual directory
+#' entries (abif_dir).
 #'
-#' @param directory abif_dir. The ABIF directory object.
-#' @param what character. Specifies what directory entry data to keep.
-#' (raw, parsed, both).
+#' If `pattern` is specified, returns data from only the directory entries with
+#' names that match `pattern` using `grep()`.
 #'
-#' @returns list containing the directory entry's data
+#' @param x object from which to extract data.
+#' @param pattern character. A string containing the directory entry name(s)
+#' to search for. Passed to `grep()`.
+#' @param what character. Specifies what directory entry data to keep ("parsed"
+#' or "raw").
+#' @param ... Other arguments passed to `grep()`
+#'
+#' @returns invisibly returns the matching data element(s). Object type matches
+#' the form of `x`: an hid object or list will return a list and an abif_dir
+#' object will return a vector.
 #' @export
 #'
-dir_data <- function(directory, what = c("parsed", "raw", "both")) {
+#' @examples
+#' \dontrun{
+#' # Get the name of the first dye from an hid object
+#' dir_data(my_hid, pattern = "DyeN.1", what = "parsed")
+#' # Get all the data elements with "DATA" in the name
+#' dir_data(my_hid, pattern = "DATA")
+#' }
+dir_data <- function(x,
+                     pattern = NULL,
+                     what = c("parsed", "raw"),
+                     ...) {
   UseMethod("dir_data")
 }
 
 #' @export
-dir_data.abif_dir <- function(directory,
-                              what = c("parsed", "raw", "both")) {
-  what <- match.arg(what)
-  if (what == "both") what <- c("parsed", "raw")
+dir_data.list <- function(x,
+                          pattern = NULL,
+                          what = c("parsed", "raw"),
+                          ...) {
+  stopifnot(is.null(pattern) || is.character(pattern))
+  if (is.character(pattern) && length(pattern) > 1) {
+    stop("pattern must be length 1")
+  }
 
-  out <- directory[paste0(what, "_data")]
-
+  if (is.null(pattern)) {
+    dir_names <- names(x)
+  } else {
+    dir_names <- grep(pattern, names(x), ...)
+  }
+  out <- lapply(x[dir_names], dir_data, what = what)
   invisible(out)
+}
+
+#' @export
+dir_data.hid <- function(x,
+                         pattern = NULL,
+                         what = c("parsed", "raw"),
+                         ...) {
+  if (is(x, "hid")) x <- x$directory
+  if (is.null(x)) stop("No directory found in x.")
+  out <- dir_data(x, pattern = pattern, what = what, ...)
+  invisible(out)
+}
+
+#' @export
+dir_data.abif_dir <- function(x,
+                              pattern = NULL,
+                              what = c("parsed", "raw"),
+                              ...) {
+  what <- match.arg(what)
+  what <- paste0(what, "_data")
+
+  invisible(x[[what]])
 }
