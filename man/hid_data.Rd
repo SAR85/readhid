@@ -2,14 +2,15 @@
 % Please edit documentation in R/hid.R
 \name{hid_data}
 \alias{hid_data}
-\title{Extracts the \code{data} element from an hid object.}
+\title{Extracts \code{data} from directory entries in an hid object.}
 \usage{
 hid_data(x, pattern = NULL, what = c("parsed", "raw", "both"), ...)
 }
 \arguments{
 \item{x}{hid object}
 
-\item{pattern}{character. A string containing the data name to search for. Passed to \code{grep()}.}
+\item{pattern}{character. A string containing the data name to search for.
+Passed to \code{grep()}.}
 
 \item{what}{character. Specifies what directory entry data to keep.}
 

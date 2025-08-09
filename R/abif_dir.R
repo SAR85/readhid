@@ -4,6 +4,7 @@ new_abif_dir <- function(dir_offset,
   stopifnot(dir_offset + 28 <= length(file_raw))
 
   keep_data <- match.arg(keep_data)
+
   if (keep_data == "both") keep_data <- c("parsed", "raw")
 
   dir_raw <- file_raw[(dir_offset + 1):(dir_offset + 28)]
@@ -18,6 +19,10 @@ new_abif_dir <- function(dir_offset,
     data_offset = int32(dir_raw[21:24])
     # data_handle = int32(raw_data[25:28])
   )
+
+  attr(out, "data") <- "parsed" %in% keep_data || "raw" %in% keep_data
+  attr(out, "raw") <- "raw" %in% keep_data
+  attr(out, "parsed") <- "parsed" %in% keep_data
 
   # This logic replaces the above standard values as applicable
   # when the element type is a special type

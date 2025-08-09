@@ -111,13 +111,14 @@ print.hid <- function(x, ...) {
   invisible(x)
 }
 
-#' Extracts the `data` element from an hid object.
+#' Extracts `data` from directory entries in an hid object.
 #'
 #' If `pattern` is specified, returns data from only the directory entries that
 #' match `pattern` using `grep()`.
 #'
 #' @param x hid object
-#' @param pattern character. A string containing the data name to search for. Passed to `grep()`.
+#' @param pattern character. A string containing the data name to search for.
+#' Passed to `grep()`.
 #' @param what character. Specifies what directory entry data to keep.
 #' @param ... Other arguments passed to `grep()`
 #'
@@ -154,28 +155,5 @@ hid_data <- function(x, pattern = NULL,
   out <- lapply(x$directory[dir_names], function(dir_entry) {
     dir_data(dir_entry, what)
   })
-  invisible(out)
-}
-
-#' Extracts the `hid_peaks` element from an hid object.
-#'
-#' @param x hid object
-#'
-#' @returns dataframe. Invisibly returns the `hid_peaks` element from the hid object
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' my_hid_peaks <- hid_peaks(my_hid)
-#' # Calculate average peak height
-#' mean(my_hid_peaks$height)
-#' }
-hid_peaks <- function(x) {
-  stopifnot(class(x) == "hid")
-
-  parsed_peaks <- hid_data(x, pattern = "Peak\\.[1-9]+", what = "parsed")
-  parsed_peaks <- lapply(parsed_peaks, `[[`, "parsed_data")
-  out <- peaks_to_df(parsed_peaks)
-
   invisible(out)
 }
