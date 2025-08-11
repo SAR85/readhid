@@ -36,6 +36,11 @@ print.abif_dat <- function(x, ...) {
   invisible(x)
 }
 
+#' @export
+length.abif_dat <- function(x) {
+  max(lengths(unclass(x)))
+}
+
 #' Parses the raw data associated with an ABIF data object (`abif_dat`).
 #'
 #' @param x abif_dat object containing raw data.
