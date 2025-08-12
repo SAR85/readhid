@@ -106,11 +106,33 @@ friendly_peak_names <- function() {
   )
 }
 
+#' Extracts a list of the dye names and their corresponding index values from an
+#' `abif_dir` object.
+#'
+#' @param directory abif_dir object
+#'
+#' @returns list with elements `dye_index` and `dye_name`.
+#' @export
+#'
 dye_names <- function(directory) {
   num_dyes <- dir_data(directory$`Dye#.1`, "parsed")
   dyes <- directory[grep("DyeN\\.[0-9]+", names(directory))]
+
+  dyes <- sapply(dyes, function(dye) {
+    if (is.null(dye$parsed_data)) {
+      if (is.null(dye$raw_data)) {
+        stop("No data for dyes in directory.")
+      } else {
+        out <- parse_dat(dye$raw_data)
+      }
+    } else {
+      out <- dye$parsed_data
+    }
+    out
+  })
+
   list(
     dye_index = seq(num_dyes),
-    dye_name = sapply(dyes, `[[`, "parsed_data")
+    dye_name = dyes
   )
 }
