@@ -1,8 +1,4 @@
-new_hid <- function(filepath,
-                    keep_data = c("parsed", "raw", "both", "none"),
-                    friendly_peak_names = TRUE,
-                    dye_names = TRUE,
-                    ...) {
+new_hid <- function(filepath, keep_data = c("parsed", "raw", "both", "none")) {
   keep_data <- match.arg(keep_data)
   both <- FALSE
 
@@ -26,10 +22,7 @@ new_hid <- function(filepath,
   dir_list <- lapply(
     dir_entry_offsets,
     function(x) {
-      abif_dir(x,
-        raw_data,
-        keep_data = ifelse(both, "both", keep_data)
-      )
+      abif_dir(x, raw_data, keep_data = ifelse(both, "both", keep_data))
     }
   )
   names(dir_list) <- sapply(
@@ -48,37 +41,37 @@ new_hid <- function(filepath,
   structure(out, class = "hid")
 }
 
-#' Creates an hid object with the data from an .fsa or .hid file.
+#' Creates an `hid` object
 #'
-#' @param filepath character vector of length 1. Path to the .fsa or .hid file.
+#' `hid` objects represent the data in an Applied Biosystems Inc. Format (ABIF)
+#' file. These files contain DNA sequencing or fragment analysis data produced
+#' by Genetic Analyzers and commonly have file extensions such as .fsa or .hid.
+#'
+#' @param filepath character. Path to the .fsa or .hid file.
 #' @param keep_data character. Specifies what directory entry data to keep
 #' (raw, parsed, both, or none). If "raw" or "both", also keeps the entire file
 #' raw data.
-#' @param ... Other parameters to customize the data parsing and/or object format
-#' @param friendly_peak_names logical. When TRUE, uses informative names in the `hid_peaks` data frame
-#' @param dye_names logical. When TRUE, adds dye names to `hid_peaks` data frame
 #'
 #' @returns hid object
 #' @export hid
 #'
 #' @examples
 #' \dontrun{
-#' my_hid_file <- hid("/path/to/file.hid")
+#' my_hid_file <- hid("/path/to/file.hid", keep_data = "parsed")
 #' }
 #'
-hid <- function(filepath,
-                keep_data = c("parsed", "raw", "both", "none"),
-                friendly_peak_names = TRUE,
-                dye_names = TRUE, ...) {
-  new_hid(filepath, keep_data, friendly_peak_names, dye_names, ...)
+hid <- function(filepath, keep_data = c("parsed", "raw", "both", "none")) {
+  new_hid(filepath, keep_data)
 }
 
-#' Reads an hid file
+#' Read an ABIF file
 #'
-#' @param filepath Character vector of length 1 containing path to the .fsa or .hid file.
-#' @param ... Additional arguments to pass to `readBin()`
+#' This function reads the raw data from an ABIF file.
 #'
-#' @returns Raw vector with contents of the file.
+#' @param filepath character. Path to the ABIF file.
+#' @param ... Additional arguments passed to `readBin()`
+#'
+#' @returns raw. The raw contents of the file.
 #'
 read_hid <- function(filepath, ...) {
   stopifnot(file.exists(filepath))
