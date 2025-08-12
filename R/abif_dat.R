@@ -26,11 +26,17 @@ print.abif_dat <- function(x, ...) {
   type_name <- element_types(type_num, "name")
   is_raw <- attr(x, "is_raw")
 
+  num_elements <- ifelse(
+    is_raw,
+    length(x) / element_types(type_num, "size"),
+    length(x)
+  )
+
   cat(
     "ABIF data object\n",
     "Data type:", type_num, paste0("(", type_name, ")\n"),
-    "Num. elements:", length(x), "\n",
-    "Raw data:", is_raw
+    "Num. elements:", num_elements, "\n",
+    "Raw data:", is_raw, "\n"
   )
 
   invisible(x)
