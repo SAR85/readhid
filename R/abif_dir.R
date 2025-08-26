@@ -86,26 +86,26 @@ abif_dir <- function(dir_offset,
 }
 
 #' @export
-print.abif_dir <- function(x, ...) {
-  stopifnot(class(x) == "abif_dir")
+summary.abif_dir <- function(object, ...) {
+  stopifnot(class(object) == "abif_dir")
 
   cat(
     "ABIF directory entry\n",
-    "Name:", x$name, "\n",
-    "Number:", x$num, "\n",
-    "Type:", x$type,
-    paste0("(", element_types(x$type, "name"), ")"), "\n",
-    "Element size:", x$element_size, "bytes\n",
-    "Num. elements:", format(x$num_elements, big.mark = ","), "\n",
-    "Data size:", format(x$data_size, big.mark = ","), "bytes\n",
-    "Data offset:", x$data_offset, "\n"
+    "Name:", object$name, "\n",
+    "Number:", object$num, "\n",
+    "Type:", object$type,
+    paste0("(", element_types(object$type, "name"), ")"), "\n",
+    "Element size:", object$element_size, "bytes\n",
+    "Num. elements:", format(object$num_elements, big.mark = ","), "\n",
+    "Data size:", format(object$data_size, big.mark = ","), "bytes\n",
+    "Data offset:", object$data_offset, "\n"
   )
-  if (!is.null(attr(x, "special_type"))) {
+  if (!is.null(attr(object, "special_type"))) {
     cat(
-      "Special type:", attr(x, "special_type")
+      "Special type:", attr(object, "special_type")
     )
   }
-  invisible(x)
+  invisible(object)
 }
 
 #' Extracts the name from an ABIF directory object.

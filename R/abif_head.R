@@ -24,24 +24,25 @@ new_abif_head <- function(dat) {
 }
 
 #' Creates a new `abif_head` object, which is used to represent the header of
-#' an ABIF file, such as .fsa or .hid.
+#' an ABIF file.
 #'
 #' @param dat raw. The data containing the ABIF file header. Must be at least
 #' the first 30 bytes of the file.
 #'
 #' @return abif_head object containing the parsed header data.
 #' @export
+#'
 abif_head <- function(dat) {
   new_abif_head(dat)
 }
 
 #' @export
-print.abif_head <- function(x, ...) {
+summary.abif_head <- function(object, ...) {
   cat(
     "ABIF header\n",
-    "File format version:", x$file_format_version, "\n",
-    "Directory elements:", x$num_elements, "\n",
-    "Directory offset:", x$directory_offset
+    "File format version:", object$file_format_version, "\n",
+    "Directory elements:", object$num_elements, "\n",
+    "Directory offset:", object$directory_offset
   )
-  invisible(x)
+  invisible(object)
 }

@@ -10,26 +10,34 @@ new_abif_dat <- function(data, type) {
 #' Creates an `abif_dat` object, which represents a data element from an ABIF
 #' file.
 #'
-#' @param data atomic vector containing the data
-#' @param type integer. The element type of the data
+#' @param data atomic vector containing the data.
+#' @param type integer. The ABIF element type for the data.
 #'
 #' @returns abif_dat object.
 #' @export
+#'
+#' @examples
+#' # Create an abif_dat object containing raw data representing signed 16-bit
+#' # integer data (element type 4)
+#' raw_dat <- abif_dat(as.raw(c(0x00, 0x01)), type = 4L)
+#'
+#' # An atomic vector of any type can be used for the data:
+#' dat <- abif_dat(c(1L:5L), type = 5L)
 #'
 abif_dat <- function(data, type) {
   new_abif_dat(data, type)
 }
 
 #' @export
-print.abif_dat <- function(x, ...) {
-  type_num <- attr(x, "type")
+summary.abif_dat <- function(object, ...) {
+  type_num <- attr(object, "type")
   type_name <- element_types(type_num, "name")
-  is_raw <- attr(x, "is_raw")
+  is_raw <- attr(object, "is_raw")
 
   num_elements <- ifelse(
     is_raw,
-    length(x) / element_types(type_num, "size"),
-    length(x)
+    length(object) / element_types(type_num, "size"),
+    length(object)
   )
 
   cat(
@@ -38,17 +46,25 @@ print.abif_dat <- function(x, ...) {
     "Num. elements:", num_elements, "\n",
     "Raw data:", is_raw, "\n"
   )
-
-  invisible(x)
+  NextMethod(object)
 }
 
 #' Parses the raw data associated with an ABIF data object (`abif_dat`).
 #'
+#' Times (element type 11) are returned as a list and dates (element
+#' type 10) are returned as a `Date`. Other element types are returned as
+#' numeric or character vectors. If x does not contain raw data, the data is
+#' returned unchanged.
+#'
 #' @param x abif_dat object containing raw data.
 #'
-#' @returns list, character, or numeric vector, depending on element type.
-#' The parsed data from the directory entry.
+#' @returns atomic vector, object, or list, containing the parsed data from the
+#' directory entry.
 #' @export
+#'
+#' @examples
+#' my_dat <- abif_dat(as.raw(0x01), type = 13L)
+#' x <- parse_dat(my_dat)
 #'
 parse_dat <- function(x) {
   UseMethod("parse_dat")
@@ -56,10 +72,10 @@ parse_dat <- function(x) {
 
 #' @export
 parse_dat.abif_dat <- function(x) {
-
   # Only try to parse raw data
-  if (!attr(x, "is_raw")) return(x)
-
+  if (!attr(x, "is_raw")) {
+    return(x)
+  }
 
   element_type <- attr(x, "type")
   element_size <- element_types(element_type, "size")
@@ -109,7 +125,7 @@ parse_dat.abif_dat <- function(x) {
   invisible(out)
 }
 
-#' Returns vector of the "special" element types found in newer version of
+#' Returns vector of the "special" element types found in newer versions of
 #' ABIF files, such as .hid files produced by the 3500 Genetic Analyzer.
 #'
 #' @returns integer vector representing the special element types.
@@ -122,25 +138,23 @@ special_types <- function() {
   c(28L, 30L:34L)
 }
 
-#' Returns the name, element size, substitute element type, or
-#' the name of the function used to parse the element type.
+#' Returns the name, element size, substitute element type, or the name of the
+#' function used to parse the element type.
 #'
 #' Return value depends on the `get` parameter:
-#' "name" returns a string with the name of the element type
+#'  "name" returns a string with the name of the element type
+#'  "size" returns an integer with the element size for the element type\
+#'  "sub" returns an integer with the standard element type substitute. For
+#'    special element types, this will be the standard element type used to
+#'    parse the data. For normal element types, this will be the same as the
+#'    element type.
+#'  "parse_fun" returns a string with the name of the function used to parse the
+#'    element type.
 #'
-#' "size" returns an integer with the element size for the element type
+#' @param element_type integer representing the element type to look up.
+#' @param get character specifying the data to return.
 #'
-#' "sub" returns an integer with the standard element type substitute. For
-#' special element types, this will be the standard element type used to parse
-#' the data. For normal element types, this will be the same as the element type.
-#'
-#' "parse_fun" returns a string with the name of the function used to parse the
-#' element type.
-#'
-#' @param element_type Integer vector of length 1 to look up
-#' @param get Character vector of length 1 specifying the data to return
-#'
-#' @returns Character vector or integer vector of length 1. Depends on value of `get`
+#' @returns character or integer, depending on value of `get`
 #' @export
 #'
 #' @seealso [special_types()]

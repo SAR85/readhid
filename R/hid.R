@@ -92,14 +92,14 @@ read_hid <- function(filepath, ...) {
 }
 
 #' @export
-print.hid <- function(x, ...) {
+summary.hid <- function(object, ...) {
   cat(
     "ABIF file object\n",
-    "File format version:", x$header$file_format_version, "\n",
-    "File:", x$file, "\n",
-    "Elements:", x$header$num_elements, "\n",
-    "Instrument:", x$data$MODL.1, "\n",
-    paste("Run date:", x$data$RUND.1), "\n"
+    "File format version:", object$header$file_format_version, "\n",
+    "File:", object$file, "\n",
+    "Elements:", object$header$num_elements, "\n",
+    "Instrument:", object$data$MODL.1, "\n",
+    paste("Run date:", object$data$RUND.1), "\n"
   )
-  invisible(x)
+  invisible(object)
 }
