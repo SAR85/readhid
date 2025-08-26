@@ -2,20 +2,21 @@
 % Please edit documentation in R/raw_helpers.R
 \name{int16}
 \alias{int16}
-\title{Parse signed 16 bit integers from a raw vector}
+\title{Parse signed 16-bit integers from a raw vector}
 \usage{
 int16(f, n = 1L, ...)
 }
 \arguments{
-\item{f}{Raw vector}
+\item{f}{raw. The raw data to be parsed.}
 
-\item{n}{The maximum number of records to be read. Passed to \code{readBin()}.}
+\item{n}{integer. The maximum number of records to be read. Passed to
+\code{readBin()}.}
 
-\item{...}{Other arguments to pass to \code{readBin()}}
+\item{...}{Other arguments passed to \code{readBin()}}
 }
 \value{
-Integer vector
+integer. Integers parsed from the raw data.
 }
 \description{
-Parse signed 16 bit integers from a raw vector
+Parse signed 16-bit integers from a raw vector
 }

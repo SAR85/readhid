@@ -11,7 +11,7 @@ float64(f, n = 1L, ...)
 
 \item{n}{The maximum number of records to be read. Passed to \code{readBin()}.}
 
-\item{...}{Other arguments to pass to \code{readBin()}}
+\item{...}{Other arguments passed to \code{readBin()}}
 }
 \value{
 Double vector

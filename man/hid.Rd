@@ -2,38 +2,28 @@
 % Please edit documentation in R/hid.R
 \name{hid}
 \alias{hid}
-\title{Creates an hid object with the data from an .fsa or .hid file.}
+\title{Creates an \code{hid} object}
 \usage{
-hid(
-  filepath,
-  keep_data = c("parsed", "raw", "both", "none"),
-  friendly_peak_names = TRUE,
-  dye_names = TRUE,
-  ...
-)
+hid(filepath, keep_data = c("parsed", "raw", "both", "none"))
 }
 \arguments{
-\item{filepath}{character vector of length 1. Path to the .fsa or .hid file.}
+\item{filepath}{character. Path to the .fsa or .hid file.}
 
 \item{keep_data}{character. Specifies what directory entry data to keep
 (raw, parsed, both, or none). If "raw" or "both", also keeps the entire file
 raw data.}
-
-\item{friendly_peak_names}{logical. When TRUE, uses informative names in the \code{hid_peaks} data frame}
-
-\item{dye_names}{logical. When TRUE, adds dye names to \code{hid_peaks} data frame}
-
-\item{...}{Other parameters to customize the data parsing and/or object format}
 }
 \value{
 hid object
 }
 \description{
-Creates an hid object with the data from an .fsa or .hid file.
+\code{hid} objects represent the data in an Applied Biosystems Inc. Format (ABIF)
+file. These files contain DNA sequencing or fragment analysis data produced
+by Genetic Analyzers and commonly have file extensions such as .fsa or .hid.
 }
 \examples{
 \dontrun{
-my_hid_file <- hid("/path/to/file.hid")
+my_hid_file <- hid("/path/to/file.hid", keep_data = "parsed")
 }
 
 }

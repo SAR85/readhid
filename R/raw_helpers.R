@@ -1,10 +1,11 @@
-#' Parse signed 32 bit integers from a raw vector
+#' Parse signed 32-bit integers from a raw vector
 #'
-#' @param f Raw vector
-#' @param n The maximum number of records to be read. Passed to `readBin()`.
-#' @param ... Other arguments to pass to `readBin()`
+#' @param f raw. The raw data to be parsed.
+#' @param n integer. The maximum number of records to be read. Passed to
+#' `readBin()`.
+#' @param ... Other arguments passed to `readBin()`
 #'
-#' @returns Integer vector
+#' @returns integer. Integers parsed from the raw data.
 #' @export
 #'
 int32 <- function(f, n = 1L, ...) {
@@ -19,13 +20,14 @@ int32 <- function(f, n = 1L, ...) {
   )
 }
 
-#' Parse signed 16 bit integers from a raw vector
+#' Parse signed 16-bit integers from a raw vector
 #'
-#' @param f Raw vector
-#' @param n The maximum number of records to be read. Passed to `readBin()`.
-#' @param ... Other arguments to pass to `readBin()`
+#' @param f raw. The raw data to be parsed.
+#' @param n integer. The maximum number of records to be read. Passed to
+#' `readBin()`.
+#' @param ... Other arguments passed to `readBin()`
 #'
-#' @returns Integer vector
+#' @returns integer. Integers parsed from the raw data.
 #' @export
 #'
 int16 <- function(f, n = 1L, ...) {
@@ -40,13 +42,14 @@ int16 <- function(f, n = 1L, ...) {
   )
 }
 
-#' Parse signed 8 bit integers from a raw vector
+#' Parse signed 8-bit integers from a raw vector
 #'
-#' @param f Raw vector#'
-#' @param n The maximum number of records to be read. Passed to `readBin()`.
-#' @param ... Other arguments to pass to `readBin()`
+#' @param f raw. The raw data to be parsed.
+#' @param n integer. The maximum number of records to be read. Passed to
+#' `readBin()`.
+#' @param ... Other arguments passed to `readBin()`
 #'
-#' @returns Integer vector
+#' @returns integer. Integers parsed from the raw data.
 #' @export
 #'
 int8 <- function(f, n = 1L, ...) {
@@ -61,13 +64,14 @@ int8 <- function(f, n = 1L, ...) {
   )
 }
 
-#' Parses unsigned 16 bit integers from a raw vector
+#' Parses unsigned 16-bit integers from a raw vector
 #'
-#' @param f Raw vector
-#' @param n The maximum number of records to be read. Passed to `readBin()`.
-#' @param ... Other arguments to pass to `readBin()`
+#' @param f raw. The raw data to be parsed.
+#' @param n integer. The maximum number of records to be read. Passed to
+#' `readBin()`.
+#' @param ... Other arguments passed to `readBin()`
 #'
-#' @returns Integer vector
+#' @returns integer. Integers parsed from the raw data.
 #' @export
 #'
 uint16 <- function(f, n = 1L, ...) {
@@ -82,13 +86,14 @@ uint16 <- function(f, n = 1L, ...) {
   )
 }
 
-#' Parses unsigned 8 bit integers from a raw vector
+#' Parses unsigned 8-bit integers from a raw vector
 #'
-#' @param f Raw vector
-#' @param n The maximum number of records to be read. Passed to `readBin()`.
-#' @param ... Other arguments to pass to `readBin()`
+#' @param f raw. The raw data to be parsed.
+#' @param n integer. The maximum number of records to be read. Passed to
+#' `readBin()`.
+#' @param ... Other arguments passed to `readBin()`
 #'
-#' @returns Integer vector
+#' @returns integer. Integers parsed from the raw data.
 #' @export
 #'
 uint8 <- function(f, n = 1L,...) {
@@ -103,11 +108,11 @@ uint8 <- function(f, n = 1L,...) {
   )
 }
 
-#' Parses 32 bit floating numbers from a raw vector
+#' Parses 32-bit floating numbers from a raw vector
 #'
 #' @param f Raw vector
 #' @param n The maximum number of records to be read. Passed to `readBin()`.
-#' @param ... Other arguments to pass to `readBin()`
+#' @param ... Other arguments passed to `readBin()`
 #'
 #' @returns Double vector
 #' @export
@@ -120,7 +125,7 @@ float32 <- function(f, n = 1L, ...) {
 #'
 #' @param f Raw vector
 #' @param n The maximum number of records to be read. Passed to `readBin()`.
-#' @param ... Other arguments to pass to `readBin()`
+#' @param ... Other arguments passed to `readBin()`
 #'
 #' @returns Double vector
 #' @export
@@ -132,7 +137,7 @@ float64 <- function(f, n = 1L, ...) {
 #' Parses strings from raw vector
 #'
 #' @param x raw vector
-#' @param ... Other arguments to pass to `rawToChar()`
+#' @param ... Other arguments passed to `rawToChar()`
 #'
 #' @returns Character vector
 #' @export

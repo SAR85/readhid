@@ -10,9 +10,17 @@ parse_dat(x)
 \item{x}{abif_dat object containing raw data.}
 }
 \value{
-list, character, or numeric vector, depending on element type.
-The parsed data from the directory entry.
+atomic vector, object, or list, containing the parsed data from the
+directory entry.
 }
 \description{
-Parses the raw data associated with an ABIF data object (\code{abif_dat}).
+Times (element type 11) are returned as a list and dates (element
+type 10) are returned as a \code{Date}. Other element types are returned as
+numeric or character vectors. If x does not contain raw data, the data is
+returned unchanged.
+}
+\examples{
+my_dat <- abif_dat(as.raw(0x01), type = 13L)
+x <- parse_dat(my_dat)
+
 }

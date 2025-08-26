@@ -2,30 +2,27 @@
 % Please edit documentation in R/abif_dat.R
 \name{element_types}
 \alias{element_types}
-\title{Returns the name, element size, substitute element type, or
-the name of the function used to parse the element type.}
+\title{Returns the name, element size, substitute element type, or the name of the
+function used to parse the element type.}
 \usage{
 element_types(element_type, get = c("name", "size", "sub", "parse_fun"))
 }
 \arguments{
-\item{element_type}{Integer vector of length 1 to look up}
+\item{element_type}{integer representing the element type to look up.}
 
-\item{get}{Character vector of length 1 specifying the data to return}
+\item{get}{character specifying the data to return.}
 }
 \value{
-Character vector or integer vector of length 1. Depends on value of \code{get}
+character or integer, depending on value of \code{get}
 }
 \description{
 Return value depends on the \code{get} parameter:
 "name" returns a string with the name of the element type
-}
-\details{
-"size" returns an integer with the element size for the element type
-
+"size" returns an integer with the element size for the element type\
 "sub" returns an integer with the standard element type substitute. For
-special element types, this will be the standard element type used to parse
-the data. For normal element types, this will be the same as the element type.
-
+special element types, this will be the standard element type used to
+parse the data. For normal element types, this will be the same as the
+element type.
 "parse_fun" returns a string with the name of the function used to parse the
 element type.
 }

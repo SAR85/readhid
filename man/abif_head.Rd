@@ -3,7 +3,7 @@
 \name{abif_head}
 \alias{abif_head}
 \title{Creates a new \code{abif_head} object, which is used to represent the header of
-an ABIF file, such as .fsa or .hid.}
+an ABIF file.}
 \usage{
 abif_head(dat)
 }
@@ -16,5 +16,5 @@ abif_head object containing the parsed header data.
 }
 \description{
 Creates a new \code{abif_head} object, which is used to represent the header of
-an ABIF file, such as .fsa or .hid.
+an ABIF file.
 }

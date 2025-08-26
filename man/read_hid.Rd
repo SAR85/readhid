@@ -2,18 +2,18 @@
 % Please edit documentation in R/hid.R
 \name{read_hid}
 \alias{read_hid}
-\title{Reads an hid file}
+\title{Read an ABIF file}
 \usage{
 read_hid(filepath, ...)
 }
 \arguments{
-\item{filepath}{Character vector of length 1 containing path to the .fsa or .hid file.}
+\item{filepath}{character. Path to the ABIF file.}
 
-\item{...}{Additional arguments to pass to \code{readBin()}}
+\item{...}{Additional arguments passed to \code{readBin()}}
 }
 \value{
-Raw vector with contents of the file.
+raw. The raw contents of the file.
 }
 \description{
-Reads an hid file
+This function reads the raw data from an ABIF file.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/raw_helpers.R
 \name{float32}
 \alias{float32}
-\title{Parses 32 bit floating numbers from a raw vector}
+\title{Parses 32-bit floating numbers from a raw vector}
 \usage{
 float32(f, n = 1L, ...)
 }
@@ -11,11 +11,11 @@ float32(f, n = 1L, ...)
 
 \item{n}{The maximum number of records to be read. Passed to \code{readBin()}.}
 
-\item{...}{Other arguments to pass to \code{readBin()}}
+\item{...}{Other arguments passed to \code{readBin()}}
 }
 \value{
 Double vector
 }
 \description{
-Parses 32 bit floating numbers from a raw vector
+Parses 32-bit floating numbers from a raw vector
 }

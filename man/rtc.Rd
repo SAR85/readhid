@@ -9,7 +9,7 @@ rtc(x, ...)
 \arguments{
 \item{x}{raw vector}
 
-\item{...}{Other arguments to pass to \code{rawToChar()}}
+\item{...}{Other arguments passed to \code{rawToChar()}}
 }
 \value{
 Character vector

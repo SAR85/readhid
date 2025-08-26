@@ -2,20 +2,21 @@
 % Please edit documentation in R/raw_helpers.R
 \name{uint8}
 \alias{uint8}
-\title{Parses unsigned 8 bit integers from a raw vector}
+\title{Parses unsigned 8-bit integers from a raw vector}
 \usage{
 uint8(f, n = 1L, ...)
 }
 \arguments{
-\item{f}{Raw vector}
+\item{f}{raw. The raw data to be parsed.}
 
-\item{n}{The maximum number of records to be read. Passed to \code{readBin()}.}
+\item{n}{integer. The maximum number of records to be read. Passed to
+\code{readBin()}.}
 
-\item{...}{Other arguments to pass to \code{readBin()}}
+\item{...}{Other arguments passed to \code{readBin()}}
 }
 \value{
-Integer vector
+integer. Integers parsed from the raw data.
 }
 \description{
-Parses unsigned 8 bit integers from a raw vector
+Parses unsigned 8-bit integers from a raw vector
 }

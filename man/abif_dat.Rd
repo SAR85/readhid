@@ -8,9 +8,9 @@ file.}
 abif_dat(data, type)
 }
 \arguments{
-\item{data}{atomic vector containing the data}
+\item{data}{atomic vector containing the data.}
 
-\item{type}{integer. The element type of the data}
+\item{type}{integer. The ABIF element type for the data.}
 }
 \value{
 abif_dat object.
@@ -18,4 +18,13 @@ abif_dat object.
 \description{
 Creates an \code{abif_dat} object, which represents a data element from an ABIF
 file.
+}
+\examples{
+# Create an abif_dat object containing raw data representing signed 16-bit
+# integer data (element type 4)
+raw_dat <- abif_dat(as.raw(c(0x00, 0x01)), type = 4L)
+
+# An atomic vector of any type can be used for the data:
+dat <- abif_dat(c(1L:5L), type = 5L)
+
 }

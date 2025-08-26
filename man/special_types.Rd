@@ -2,7 +2,7 @@
 % Please edit documentation in R/abif_dat.R
 \name{special_types}
 \alias{special_types}
-\title{Returns vector of the "special" element types found in newer version of
+\title{Returns vector of the "special" element types found in newer versions of
 ABIF files, such as .hid files produced by the 3500 Genetic Analyzer.}
 \usage{
 special_types()
@@ -11,7 +11,7 @@ special_types()
 integer vector representing the special element types.
 }
 \description{
-Returns vector of the "special" element types found in newer version of
+Returns vector of the "special" element types found in newer versions of
 ABIF files, such as .hid files produced by the 3500 Genetic Analyzer.
 }
 \examples{
