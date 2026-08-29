@@ -13,8 +13,14 @@ and have file extensions such as .fsa and .hid.
 
 There are other packages that read ABIF format files, however none of
 them will correctly extract the `DATA` and `Peak` fields from the newer
-file format, such as the .hid files produced by the 3500 Genetic
+ABIF file format, such as the .hid files produced by the 3500 Genetic
 Analyzer.
+
+readhid offers a relatively low-level interpretation of the file data.
+The package is not designed to interpret the sequencing or fragment
+analysis data and does no baselining, peak detection, or sizing or the
+raw fluorescence data. However, it does allow reading of the
+fluorescence data and other metadata associated with an instrument run.
 
 ## Installation
 
@@ -34,7 +40,7 @@ Read ABIF files by calling `hid()` and provide a path to the file:
 library(readhid)
 my_hid <- hid("path/to/my.hid")
 
-print(my_hid)
+summary(my_hid)
 ```
 
 The resulting `hid` object will contain data from the ABIF file,
@@ -87,7 +93,7 @@ dir_data(my_hid, "DATA") |> names()
 ```
 
 Analyzed peak data is extracted, if present, and organized into a data
-frame. The dataframe can be obtained using `hid_peaks()`.
+frame. The dataframe can be obtained using `abif_peaks()`.
 
 ``` r
 my_hid_peaks <- abif_peaks(my_hid)

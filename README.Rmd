@@ -21,7 +21,9 @@ knitr::opts_chunk$set(
 
 The goal of readhid is to read Applied Biosystems Inc. Format (ABIF) files. These files are created by Applied Biosystems Genetic Analyzers and have file extensions such as .fsa and .hid.
 
-There are other packages that read ABIF format files, however none of them will correctly extract the `DATA` and `Peak` fields from the newer file format, such as the .hid files produced by the 3500 Genetic Analyzer.
+There are other packages that read ABIF format files, however none of them will correctly extract the `DATA` and `Peak` fields from the newer ABIF file format, such as the .hid files produced by the 3500 Genetic Analyzer.
+
+readhid offers a relatively low-level interpretation of the file data. The package is not designed to interpret the sequencing or fragment analysis data and does no baselining, peak detection, or sizing or the raw fluorescence data. However, it does allow reading of the fluorescence data and other metadata associated with an instrument run.
 
 ## Installation
 
@@ -47,7 +49,7 @@ my_hid$file <- "path/to/my.hid"
 library(readhid)
 my_hid <- hid("path/to/my.hid")
 
-print(my_hid)
+summary(my_hid)
 ```
 
 The resulting `hid` object will contain data from the ABIF file, including various instrument and run parameters, as well as the raw sequencing or fragment analysis data. All of the data can be accessed in the `data` element of the object. The available data fields vary by instrument model used for data collection.
@@ -66,7 +68,7 @@ The raw sequencing or fragment analysis data are found in the `DATA` fields:
 dir_data(my_hid, "DATA") |> names()
 ```
 
-Analyzed peak data is extracted, if present, and organized into a data frame. The dataframe can be obtained using `hid_peaks()`.
+Analyzed peak data is extracted, if present, and organized into a data frame. The dataframe can be obtained using `abif_peaks()`.
 
 ```{r}
 my_hid_peaks <- abif_peaks(my_hid)
